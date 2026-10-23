@@ -1,0 +1,17 @@
+# boost hunt variant: config-only change (CONFIG_VARIANT=durable, sut/variants/durable.sed); same source, patches and workload.
+services:
+  node1:
+    image: cassandra-accord-cassandra:e874e3a9-cfg-durable
+    build:
+      args:
+        CONFIG_VARIANT: durable
+  node2:
+    image: cassandra-accord-cassandra:e874e3a9-cfg-durable
+    build:
+      args:
+        CONFIG_VARIANT: durable
+  node3:
+    image: cassandra-accord-cassandra:e874e3a9-cfg-durable
+    build:
+      args:
+        CONFIG_VARIANT: durable

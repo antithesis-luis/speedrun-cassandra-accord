@@ -1,0 +1,57 @@
+
+# ---------------------------------------------------------------------------
+# Antithesis harness overrides (appended to the ref's stock conf/cassandra.yaml;
+# duplicate keys are allowed and the later value wins). Identical for every ref.
+# See antithesis/scratchbook/deployment-topology.md and tuning.md.
+# ---------------------------------------------------------------------------
+cluster_name: 'accord-test'
+num_tokens: 1
+partitioner: org.apache.cassandra.dht.Murmur3Partitioner
+endpoint_snitch: SimpleSnitch
+seed_provider:
+  - class_name: org.apache.cassandra.locator.SimpleSeedProvider
+    parameters:
+      - seeds: "__SEEDS__"
+listen_address: __HOSTNAME__
+rpc_address: __HOSTNAME__
+start_native_transport: true
+
+data_file_directories:
+  - /var/lib/cassandra/data
+commitlog_directory: /var/lib/cassandra/commitlog
+hints_directory: /var/lib/cassandra/hints
+saved_caches_directory: /var/lib/cassandra/saved_caches
+cdc_raw_directory: /var/lib/cassandra/cdc_raw
+
+# tuning.md rows (commitlog_sync deliberately left at the production default: periodic/10000ms)
+commitlog_segment_size: 5MiB
+memtable_heap_space: 16MiB
+write_request_timeout: 10s
+read_request_timeout: 10s
+native_transport_timeout: 30s
+
+accord:
+  enabled: true
+  journal_directory: /var/lib/cassandra/accord_journal
+  default_transactional_mode: full
+  shard_durability_cycle: 20s
+  global_durability_cycle: 20s
+  shard_durability_target_splits: 4
+  retry_syncpoint: "1s*attempts"
+  retry_durability: "1s*attempts"
+  expire_syncpoint: "1s*attempts<=300s"
+  recover_txn: "1s*attempts <= 10s"
+  command_store_shard_count: 2
+  queue_shard_count: 2
+  journal:
+    segment_size: 1048576
+    compaction_period: 10000ms
+    # flush_mode left at the production default (PERIODIC), see tuning.md
+    # Default EXIT makes a node that was killed (no clean-stop marker) refuse to start ever again,
+    # which would turn every Antithesis node-termination fault into a permanent node loss.
+    # ALLOW_UNSAFE_STARTUP replays the journal and starts. It is safe here because journal segments
+    # are mmap'd (ActiveSegment) and Antithesis kills the process, not the kernel: every record
+    # written before the kill is in the page cache, so the vote log is complete (the condition the
+    # policy asks the operator to establish). REBOOTSTRAP was tried first; locally the restarted
+    # node had not finished startup after 12+ min (scratchbook/logs/local-rebootstrap-stuck.txt).
+    stop_marker_failure_policy: ALLOW_UNSAFE_STARTUP

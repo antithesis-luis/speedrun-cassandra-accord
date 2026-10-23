@@ -1,0 +1,14 @@
+diff --git a/src/java/org/apache/cassandra/service/CassandraDaemon.java b/src/java/org/apache/cassandra/service/CassandraDaemon.java
+index 7cf1494bb1..8608a94f04 100644
+--- a/src/java/org/apache/cassandra/service/CassandraDaemon.java
++++ b/src/java/org/apache/cassandra/service/CassandraDaemon.java
+@@ -854,6 +854,9 @@ public class CassandraDaemon
+             start();
+ 
+             logger.info("Startup complete");
++            com.antithesis.sdk.Assert.reachable("Cassandra node startup complete",
++                                                com.fasterxml.jackson.databind.node.JsonNodeFactory.instance.objectNode()
++                                                    .put("accord_enabled", DatabaseDescriptor.getAccord() != null && DatabaseDescriptor.getAccord().enabled));
+         }
+         catch (Throwable e)
+         {

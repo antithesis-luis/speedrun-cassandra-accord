@@ -1,0 +1,59 @@
+{
+  "completed_at": "2026-10-09T01:24:49Z",
+  "created_at": "2026-10-08T19:29:24Z",
+  "creator": {
+    "name": "honey_pwhale",
+    "type": "unknown"
+  },
+  "description": "boost hunt #4: current, network+pause+throttle, no node kills, 300m, turbo (isolate restart effects)",
+  "launcher": "Boosted accord",
+  "links": {
+    "triage_report": "https://honey-whale.antithesis.com/report/fsuUPPeUhgYCGq2LvZsJZ8d_/h5mxMMzBbn64mgpOwAlUeWFw6Qz1sXSt8CC8So_UiDc.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA5VDAwOjI0OjQ4LjM2MjY1ODEyM1oiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiaDVteE1NekJibjY0bWdwT3dBbFVlV0Z3NlF6MXNYU3Q4Q0M4U29fVWlEYy5odG1sIiwicmVwb3J0X2lkIjoiZnN1VVBQZVVoZ1lDR3EyTHZac0paOGRfIn19fXf3jvb122sZ-4y4nVBJTQcerBZo0DCvMeEV-7gJtIAYrllzdzZWaLw_Uw6xtClTY5HNIBY2xT7uaSGhz2pQEgc"
+  },
+  "parameters": {
+    "antithesis.config_image": "snouty-config@sha256:6fa4f6e55cfe9ecd160644c6133c1521b31c9fd228d3e2fe8b27d4305b7091f3",
+    "antithesis.description": "boost hunt #4: current, network+pause+throttle, no node kills, 300m, turbo (isolate restart effects)",
+    "antithesis.duration": "300",
+    "antithesis.is_ephemeral": "false",
+    "antithesis.source": "boost-cassandra-accord-current",
+    "antithesis.test_name": "boost/cassandra-accord/cassandra@e874e3a9",
+    "custom.memory": "10",
+    "custom.boost.name": "accord",
+    "custom.include_for_node_throttle": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+    "custom.timing.scaling": "10",
+    "custom.timing.discrete": "false",
+    "custom.clock_skip": "false",
+    "custom.include_for_node_pause": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+    "custom.cpu_mod": "false",
+    "antithesis.performance_tier": "turbo",
+    "antithesis.is_setup": "false",
+    "antithesis.integrations.type": "none"
+  },
+  "results": {
+    "environment": {
+      "antithesis_version": "v63-12",
+      "images": [
+        {
+          "name": "snouty-config",
+          "image": "us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/snouty-config@sha256:4874f484006c92cf848a6581942ba25b8f2f76b899ddec707499e8505f630ecb",
+          "created": "2026-10-08T18:37:12.175232652Z"
+        },
+        {
+          "name": "cassandra-accord-cassandra",
+          "image": "us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-cassandra@sha256:37aeeebcc8b12beb380f7c05768b472ec330f194d05cb0330f26a6f26dea620b",
+          "tag": "e874e3a9",
+          "created": "2026-10-08T18:17:40.723609102Z"
+        },
+        {
+          "name": "cassandra-accord-workload",
+          "image": "us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-workload@sha256:45ce604e35f0c8c09c5fc79a7ece5af6e4dd02516aba43782a5d64dcd183dc0e",
+          "tag": "63f7cc96e480",
+          "created": "2026-10-08T18:14:46.989464099Z"
+        }
+      ]
+    }
+  },
+  "run_id": "1d499fea4f9ce6971e413c613736faf2-63-12",
+  "started_at": "2026-10-08T19:29:24Z",
+  "status": "completed"
+}

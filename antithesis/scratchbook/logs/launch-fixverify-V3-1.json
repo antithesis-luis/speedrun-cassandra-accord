@@ -1,0 +1,24 @@
+Image already in a registry, skipping push: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-workload:63f7cc96e480@sha256:e9a5611c014ac3857ced58750a3f6f41c78e9cd46a8b105e71a0ae2de051f69b
+Pushing image: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-cassandra:e874e3a9-fix-V3
+Image pushed: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-cassandra:e874e3a9-fix-V3@sha256:82db04a387fde2b1ff1de709e026f1e0865a0fa60a0f8ffcf600d698d26c085e
+Building config image: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/snouty-config:20261009-025503-a20f
+Pushing config image: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/snouty-config:20261009-025503-a20f
+Config image pushed successfully: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/snouty-config@sha256:c74938d3e978aa9f45ef014c86cc536f2de7ff421280aa3b4cae6884d4c2bdbe
+
+Requesting Antithesis test run with params:
+{
+  "antithesis.test_name": "boost/cassandra-accord/cassandra@e874e3a9-fix-V3",
+  "antithesis.description": "boost fix-verify V3 #1: V3.patch (journal: torn CRC-0 tail of metadata-less active segment treated as end), same faults as hunt-3, 120m, turbo",
+  "antithesis.duration": "120",
+  "antithesis.source": "boost-cassandra-accord-fixverify-V3",
+  "antithesis.config_image": "snouty-config@sha256:c74938d3e978aa9f45ef014c86cc536f2de7ff421280aa3b4cae6884d4c2bdbe",
+  "custom.boost.name": "accord",
+  "antithesis.performance_tier": "turbo",
+  "custom.include_for_node_pause": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+  "custom.include_for_node_throttle": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+  "custom.include_for_node_termination": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+  "custom.clock_skip": "true"
+}
+{
+  "runId": "72728337f011528b627e81d1f2315090-63-12"
+}

@@ -1,0 +1,1049 @@
+{
+  "schema": 1,
+  "skill_version": "v0.7",
+  "invocation_dir": "/home/exedev/cassandra",
+  "workspace": "/home/exedev/cassandra/cassandra-accord",
+  "variant": "baseline",
+  "customer": {
+    "name": "Apache Cassandra Accord",
+    "slug": "cassandra-accord",
+    "website": "https://github.com/apache/cassandra-accord"
+  },
+  "inputs": {
+    "product_url": null,
+    "repo": "https://github.com/apache/cassandra-accord",
+    "notes": [],
+    "adopted_artifacts": []
+  },
+  "engine": "docker",
+  "skill_dir": "/home/exedev/.claude/skills/boost",
+  "snouty_settings": null,
+  "tenant": "honey-whale",
+  "workload_language": "python",
+  "triage_skill": "antithesis-triage",
+  "launchers": {
+    "webhook": "boost_test",
+    "fallback": "basic_test",
+    "roles": {
+      "sut": [
+        "cassandra-accord-node1",
+        "cassandra-accord-node2",
+        "cassandra-accord-node3"
+      ],
+      "workload": [
+        "cassandra-accord-client"
+      ],
+      "monitor": []
+    },
+    "hunt_extra_params": [
+      "antithesis.performance_tier=turbo"
+    ]
+  },
+  "machine": {
+    "cpus": 16,
+    "mem_gb": 62,
+    "disk_free_gb": 35
+  },
+  "fault_needs": [],
+  "recurring_warnings": [
+    {
+      "property": "container exit code 3 / orchestrator exit (Antithesis defaults)",
+      "runs": [
+        "42229a5d3c2580dbfcf6cf6dd13c5cc5-63-12",
+        "1d499fea4f9ce6971e413c613736faf2-63-12"
+      ],
+      "counts": [
+        37,
+        1
+      ],
+      "told_user_at": "",
+      "investigation": "not investigated (startup exception ~153.5 in hunt-1)"
+    }
+  ],
+  "budget": {
+    "minutes": {
+      "setup": 5,
+      "iterate": 30,
+      "hunt_default": 240,
+      "hunt_min": 60,
+      "fixverify": 120
+    },
+    "poll_interval_min": 10,
+    "max_concurrent": {
+      "iteration": 2,
+      "hunt": 4
+    },
+    "started_at": "2026-10-08T13:31:08Z",
+    "result_timeout_margin": {
+      "min_minutes": 30,
+      "fraction": 0.2
+    },
+    "deadline": "2026-10-09T08:00:00-04:00",
+    "deadline_tz": "America/New_York",
+    "deadline_source": "invocation",
+    "cutoff": "2026-10-09T07:00:00-04:00",
+    "run_hours": {
+      "max": 60,
+      "used": 41.583
+    }
+  },
+  "phases": {
+    "P0": {
+      "status": "done",
+      "attempts": 0,
+      "max_attempts": 1,
+      "artifact": "antithesis/scratchbook/inputs.md",
+      "evidence": [
+        "snouty 0.7.2",
+        "snouty doctor ok=true (api_key, tenant honey-whale, repository ok)",
+        "docker engine; registry auth entry present for us-central1-docker.pkg.dev",
+        "machine 16 cpu / 62 GB / 35 GB free after pruning build cache older than 12h",
+        "git, jq, gh present (gh logged in)",
+        "skills: customer-research, setup, workload, research, triage installed",
+        "deadline 08:00 America/New_York from invocation"
+      ],
+      "started_at": "2026-10-08T13:31:08Z",
+      "finished_at": "2026-10-08T13:32:29Z",
+      "note": ""
+    },
+    "P1": {
+      "status": "done",
+      "attempts": 1,
+      "max_attempts": 1,
+      "max_minutes": 10,
+      "artifact": "antithesis/scratchbook/system-brief.md",
+      "evidence": [
+        "system-brief.md written; §3 hard problems and §4 testing populated; Accord ships in Cassandra 6.0-alpha1/alpha2"
+      ],
+      "started_at": "2026-10-08T13:36:00Z",
+      "finished_at": "2026-10-08T13:50:00Z",
+      "note": ""
+    },
+    "P2": {
+      "status": "done",
+      "attempts": 1,
+      "max_attempts": 2,
+      "max_minutes": 20,
+      "artifact": "antithesis/scratchbook/guarantees.md",
+      "evidence": [
+        "5 guarantees G1-G5, 4 safety + 1 liveness, all sourced from Cassandra docs D1/D2 and CEP-15; G5 window inferred 120s"
+      ],
+      "started_at": "2026-10-08T13:34:08Z",
+      "finished_at": "2026-10-08T13:34:08Z",
+      "note": ""
+    },
+    "P3": {
+      "status": "done",
+      "attempts": 1,
+      "max_attempts": 1,
+      "max_minutes": 30,
+      "artifact": "antithesis/scratchbook/sut-choice.md",
+      "evidence": [
+        "sut-choice.md: rank 0 Cassandra cassandra-6.0-alpha2 e874e3a9 (accord fff32de2)",
+        "control candidates: CASSANDRA-21440 (G1, prefix c9ffe116), 20325, 20292; mutation fallback available",
+        "machine estimate fits: ~13GB disk for 4 builds, 6-9GB RAM run"
+      ],
+      "started_at": "2026-10-08T13:45:00Z",
+      "finished_at": "2026-10-08T14:05:00Z",
+      "note": ""
+    },
+    "P4": {
+      "status": "done",
+      "attempts": 1,
+      "max_attempts": 1,
+      "max_minutes": 30,
+      "artifact": "antithesis/scratchbook/property-catalog.md",
+      "evidence": [
+        "catalog 5 entries 1:1 with guarantees",
+        "topology 3 nodes + client; RF=3; cms reconfigure 3",
+        "tuning.md class-level (durability 20s, compaction 10s, timeouts 10s); flush modes kept at production default"
+      ],
+      "started_at": "2026-10-08T14:08:00Z",
+      "finished_at": "2026-10-08T14:40:00Z",
+      "note": ""
+    },
+    "P5": {
+      "status": "done",
+      "attempts": 1,
+      "max_attempts": 2,
+      "max_minutes": 60,
+      "validate_cycles": 1,
+      "max_validate_cycles": 6,
+      "artifact": "antithesis/config/docker-compose.yaml",
+      "evidence": [
+        "validate exit 0 cycle 1 (logs/validate-current.txt)",
+        "local smoke: 3 UN, cms 3 members, txn probe on each coordinator (logs/local-up.txt)",
+        "images cassandra-accord-cassandra:e874e3a9, workload 3220b5f4f8ba",
+        "config: stop_marker_failure_policy=ALLOW_UNSAFE_STARTUP (default EXIT blocks restart after kill; REBOOTSTRAP stuck 12+ min locally)",
+        "smoke run setup-1 completed: all properties pass, bootstrap hit 3x, instrumented 163547 locations"
+      ],
+      "started_at": "2026-10-08T14:42:00Z",
+      "finished_at": "2026-10-08T15:18:00Z",
+      "note": ""
+    },
+    "P6": {
+      "status": "done",
+      "attempts": 0,
+      "max_attempts": 12,
+      "max_minutes": 270,
+      "validate_cycles": 0,
+      "artifact": "antithesis/test/v1",
+      "evidence": [
+        "G1: 25 assertions (11 always-family, 14 sometimes/reachable); validate ok cycle 1 (logs/validate-p6-G1.txt)",
+        "G2: 12 assertions, 3 commands; validate ok cycle 1; workload 9e888dc8732a",
+        "G3: 15 assertions, 4 commands, ledger on shared volume; validate ok; workload 8919e9023f60",
+        "G4: 12 assertions, 2 commands, client timestamps off; validate ok; workload a8291d426cf0",
+        "G5: 6 assertions, eventually_recovery_probe; validate ok; workload 772c2f7e081f"
+      ],
+      "started_at": "2026-10-08T14:58:00Z",
+      "finished_at": "2026-10-08T16:20:30Z",
+      "note": "per_property: {slug: {attempts, max_attempts: 2, validate_cycles}}; max_validate_cycles is per attempt",
+      "max_validate_cycles": 2,
+      "per_property": {
+        "txn-strict-serializable": {
+          "attempts": 1,
+          "max_attempts": 2,
+          "validate_cycles": 1,
+          "status": "done"
+        },
+        "txn-all-or-nothing": {
+          "attempts": 1,
+          "max_attempts": 2,
+          "validate_cycles": 1,
+          "status": "done"
+        },
+        "acked-txn-durable": {
+          "attempts": 1,
+          "max_attempts": 2,
+          "validate_cycles": 1,
+          "status": "done"
+        },
+        "full-mode-linearizable": {
+          "attempts": 1,
+          "max_attempts": 2,
+          "validate_cycles": 1,
+          "status": "done"
+        },
+        "recovers-after-faults": {
+          "attempts": 1,
+          "max_attempts": 2,
+          "validate_cycles": 1,
+          "status": "done"
+        }
+      }
+    },
+    "P6b": {
+      "status": "done",
+      "attempts": 1,
+      "max_attempts": 4,
+      "max_minutes": 45,
+      "artifact": "antithesis/scratchbook/positive-control.md",
+      "evidence": [
+        "positive-control.md: CASSANDRA-21440 G1, prefix c9ffe116 (=fix^), fix 3d40c882",
+        "fix absent at prefix submodule 0a10cd0 (CommandChange.shouldCleanup)",
+        "prefix build OK: temurin-11 + ant jar, 3m13s (logs/build-prefix-21440.txt)"
+      ],
+      "started_at": "2026-10-08T14:08:00Z",
+      "finished_at": "2026-10-08T14:30:00Z",
+      "note": "attempts = builds: 2 candidates x 2"
+    },
+    "P7": {
+      "status": "skipped",
+      "attempts": 1,
+      "max_attempts": 2,
+      "max_minutes": 20,
+      "artifact": "antithesis/config-prefix/docker-compose.yaml",
+      "evidence": [
+        "prefix SUT image cassandra-accord-cassandra:c9ffe116 built; BOOST_SUT_REF=c9ffe116 (logs/build-prefix.txt)"
+      ],
+      "started_at": "2026-10-08T15:24:00Z",
+      "finished_at": null,
+      "note": "known-bug check moot (acked-transfer-overwritten stands on current); prefix image c9ffe116 built, override written, no pre-fix runs"
+    },
+    "P8": {
+      "status": "done",
+      "attempts": 0,
+      "artifact": "antithesis/scratchbook/runs",
+      "evidence": [
+        "iterate-4 d59511b5: full faults, only acked-transfer-overwritten-family G1 failures, all harness FPs resolved"
+      ],
+      "started_at": "2026-10-08T15:22:00Z",
+      "finished_at": "2026-10-08T19:28:31Z",
+      "note": "bounded by anti-spin rules, the clock and the ceiling",
+      "fix_invocations": 2,
+      "max_fix_invocations": 8
+    },
+    "P9": {
+      "status": "done",
+      "attempts": 0,
+      "artifact": "antithesis/scratchbook/runs",
+      "evidence": [],
+      "started_at": "2026-10-08T19:28:31Z",
+      "finished_at": "2026-10-09T08:46:20Z",
+      "note": "stopped launching after S8 (fixverify-journal-unreadable-after-kill late); 7 hunts completed"
+    },
+    "P10": {
+      "status": "done",
+      "attempts": 1,
+      "max_attempts": 3,
+      "max_minutes": 180,
+      "artifact": "antithesis/scratchbook/rca",
+      "evidence": [],
+      "started_at": "2026-10-08T15:50:05Z",
+      "finished_at": "2026-10-09T08:46:20Z",
+      "note": "acked-transfer-overwritten partial RCA, fix not verified; committed-rows-read-absent partial RCA, fail-safe failed; journal-unreadable-after-kill RCA + fix verified (caveat); lost-writes-under-unsafe-startup harness-caused"
+    },
+    "P11": {
+      "status": "done",
+      "attempts": 0,
+      "artifact": "boost-summary.md",
+      "evidence": [
+        "boost-summary.md final (355 lines), exit checks passed per writer; journal-unreadable-after-kill fix-verify moment lacks logs-explorer link"
+      ],
+      "started_at": "2026-10-09T08:46:20Z",
+      "finished_at": "2026-10-09T08:56:16Z",
+      "note": ""
+    }
+  },
+  "guarantees": [
+    {
+      "id": "G1",
+      "slug": "txn-strict-serializable",
+      "rank": 1,
+      "workload": "implemented",
+      "control": true,
+      "catalog_status": ""
+    },
+    {
+      "id": "G2",
+      "slug": "txn-all-or-nothing",
+      "rank": 2,
+      "workload": "implemented",
+      "control": false,
+      "catalog_status": ""
+    },
+    {
+      "id": "G3",
+      "slug": "acked-txn-durable",
+      "rank": 3,
+      "workload": "implemented",
+      "control": false,
+      "catalog_status": ""
+    },
+    {
+      "id": "G4",
+      "slug": "full-mode-linearizable",
+      "rank": 4,
+      "workload": "implemented",
+      "control": false,
+      "catalog_status": ""
+    },
+    {
+      "id": "G5",
+      "slug": "recovers-after-faults",
+      "rank": 5,
+      "workload": "implemented",
+      "control": false,
+      "catalog_status": ""
+    }
+  ],
+  "sut": {
+    "name": "cassandra",
+    "repo": "https://github.com/apache/cassandra",
+    "rank_rule": "0: customer OSS, built from source",
+    "current_ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+    "current_tag": "cassandra-6.0-alpha2",
+    "prefix_ref": "c9ffe116457384200851939e3687f81c00015e02",
+    "fix_ref": "3d40c8825c8b06bcbd8378d698f6d2f3bf5dc25e",
+    "control_issue": "CASSANDRA-21440",
+    "workload_image": "cassandra-accord-workload:63f7cc96e480",
+    "boost_name": "accord",
+    "accord_submodule_ref": "fff32de2e915772fbc70d16b1c32346313877838"
+  },
+  "runs": [
+    {
+      "purpose": "setup",
+      "variant": "current",
+      "n": 1,
+      "run_id": "d86774c9146cbd065a327fe82351ccd0-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:3220b5f4f8ba",
+      "workload_image_layers": "ca044f1da578b550",
+      "minutes": 5,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord"
+      ],
+      "launched_at": "2026-10-08T14:56:30Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "first smoke run, network faults only",
+      "live_checks": [],
+      "reported_at": "2026-10-08T15:15:00Z",
+      "report_url": "https://honey-whale.antithesis.com/report/FxcyD1gLlrispQT5Won2yben/WduHcL8un39ZDuEa2B0dIzOIZQA3zIJp0faSH0wUcv4.html?auth=v2.public.eyJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiV2R1SGNMOHVuMzlaRHVFYTJCMGRJek9JWlFBM3pJSnAwZmFTSDB3VWN2NC5odG1sIiwicmVwb3J0X2lkIjoiRnhjeUQxZ0xscmlzcFFUNVdvbjJ5YmVuIn19LCJuYmYiOiIyMDI2LTEwLTA4VDE0OjEyOjI4LjIyODUxOTMyOFoifburKuVu8fyGYu_Eu7kdTcQMFw8aOCQaFPJaZsIS1qId4pMOHplD6jykkOnWUNLtFryNFhvq5zcPHSclF_TfRQA",
+      "triage": "antithesis/scratchbook/runs/setup-1.md",
+      "fp_review": "no failures",
+      "session_id": "6e69e58e7a803f274d01ef44f0c65665-63-12"
+    },
+    {
+      "purpose": "iterate",
+      "variant": "current",
+      "n": 1,
+      "run_id": "e4947374c51cfdaaffd0d6ff6ae5dc10-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:4246884a53c3",
+      "workload_image_layers": "d3cee056aaf5d785",
+      "minutes": 30,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord"
+      ],
+      "launched_at": "2026-10-08T15:22:00Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "first run with G1 workload, network faults only",
+      "live_checks": [
+        {
+          "at": "2026-10-08T15:36:35Z",
+          "query": "all always-family messages (18), -n 1000",
+          "hits": "G1 failures: balances-sum 5, xfers-even 6, audit-rt 1, retried-transfer-rt 1; all others 0"
+        }
+      ],
+      "reported_at": "2026-10-08T16:12:00Z",
+      "report_url": "https://honey-whale.antithesis.com/report/xrIBSxLwAHWhRf49AROCTaMK/yWwNglWJp3ThXiESihRapRCIs7Pwz7ROGJpTVNx0uxU.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA4VDE1OjA4OjE1LjkyNDI3NDUzOFoiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoieVd3TmdsV0pwM1RoWGlFU2loUmFwUkNJczdQd3o3Uk9HSnBUVk54MHV4VS5odG1sIiwicmVwb3J0X2lkIjoieHJJQlN4THdBSFdoUmY0OUFST0NUYU1LIn19fVe7MBHDdXkUUFSrjqed0PclvzX2NZKVJ5I8PaDlT0I1lpSuezQCi6_TaC8jVV1BULZeH7_RwR2JEBhNfVArCw4",
+      "triage": "antithesis/scratchbook/runs/iterate-1.md",
+      "fp_review": "G1 failures real (false-positives.md); adversarial stands",
+      "session_id": "3499d4a0813af4531453233c579cf593-63-12",
+      "control_failed": null,
+      "note": "6 G1 Always props fail (all real, acked-transfer-overwritten family); Customer output volume failed (harness-gap, fixed logback INFO); all 13 G1 Sometimes hit"
+    },
+    {
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:772c2f7e081f",
+      "workload_image_layers": "db8842a3bd151796",
+      "minutes": 30,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord"
+      ],
+      "launched_at": "2026-10-08T16:20:30Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "live_checks": [],
+      "purpose": "iterate",
+      "variant": "current",
+      "n": 2,
+      "run_id": "83ddaf621438954613d378b310199d39-63-12",
+      "purpose_note": "first run with all five guarantees, network only, log level INFO",
+      "reported_at": "2026-10-08T17:11:43Z",
+      "report_url": "https://honey-whale.antithesis.com/report/2kEKMku2Ei7pS75t3iDKhVbx/j8fGuFgyCTLqn_ZYwhVR_WR9aLOJKc0MbEjI8xCgQpw.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA4VDE2OjAyOjE1LjQzNjY0OTA1MVoiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiajhmR3VGZ3lDVExxbl9aWXdoVlJfV1I5YUxPSktjME1iRWpJOHhDZ1Fwdy5odG1sIiwicmVwb3J0X2lkIjoiMmtFS01rdTJFaTdwUzc1dDNpREtoVmJ4In19fUDXnp8uHRyAkW1TKXuyGEnf5ad6JXRwY8XbPjTPaWFDERrThAM_peYjzYhAFaUy6lhTRHwLZtnIwHTvA_ljagM",
+      "triage": "inline props table (logs/props-83ddaf621438954613d378b310199d39-63-12.json)",
+      "fp_review": "G1 balance/even/seeded-visible: real (acked-transfer-overwritten signature, same as iterate-1); G3 two must-hit Reachables for bad paths never reached: harness-gap (marker design); G4 register-advance Sometimes unhit (coverage)",
+      "note": "G2-G5 Always all pass; G5 recovery Sometimes hit",
+      "session_id": "456111409b2f23d8c6bdebe5a2ddd247-63-12"
+    },
+    {
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:772c2f7e081f",
+      "workload_image_layers": "db8842a3bd151796",
+      "minutes": 30,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord"
+      ],
+      "launched_at": "2026-10-08T16:20:30Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "live_checks": [],
+      "purpose": "fix-verify",
+      "variant": "fixverify-acked-transfer-overwritten",
+      "n": 1,
+      "run_id": "0b77f2b9a794d868ae0d8e6cca24880e-63-12",
+      "purpose_note": "fix-verify acked-transfer-overwritten, same faults as found run, same workload as iterate-2",
+      "reported_at": "2026-10-08T17:11:43Z",
+      "report_url": "https://honey-whale.antithesis.com/report/IwjECCMMfn8ttNe3O2q6VpBk/y70rTIP4TaJV1syBnP0RWh6mhWeMzW2cVqkkqXDWRYA.html?auth=v2.public.eyJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoieTcwclRJUDRUYUpWMXN5Qm5QMFJXaDZtaFdlTXpXMmNWcWtrcVhEV1JZQS5odG1sIiwicmVwb3J0X2lkIjoiSXdqRUNDTU1mbjh0dE5lM08ycTZWcEJrIn19LCJuYmYiOiIyMDI2LTEwLTA4VDE2OjA0OjAwLjU0NTAzNzI4N1oifVgqM5p8JmpqTrJNfXkHe-u_7Wk_pfTWpvRceqnBiyttiopD_3bctLgkMbRlQc1q5E3EUWrASgjoGQxllwKrMwc",
+      "triage": "inline props table (logs/props-0b77f2b9a794d868ae0d8e6cca24880e-63-12.json)",
+      "fp_review": "balance-sum / even / audit-rt all PASS with Sometimes hit; \"a transfer transaction reads both of its accounts\" fails 3 (row read missing) -> committed-rows-read-absent candidate",
+      "note": "acked-transfer-overwritten conservation symptoms gone under network faults; missing-row symptom persists",
+      "session_id": "851fbd71f8f355411c1d038d46bd234a-63-12"
+    },
+    {
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:772c2f7e081f",
+      "workload_image_layers": "db8842a3bd151796",
+      "minutes": 30,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_termination=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.clock_skip=true"
+      ],
+      "launched_at": "2026-10-08T17:11:43Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "live_checks": [],
+      "purpose": "iterate",
+      "variant": "current",
+      "n": 3,
+      "run_id": "126cbacda11c1e49afda49c425a00f31-63-12",
+      "purpose_note": "first run with full fault set",
+      "reported_at": "2026-10-08T18:02:58Z",
+      "report_url": "https://honey-whale.antithesis.com/report/zmTGhQqT5crjapLTREVHyQo1/n3y3NkFh_T7O71fouh6SAB89DacwGkLqFUeQBBl_wCo.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA4VDE2OjUzOjMzLjk3NTkyMjEyNFoiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoibjN5M05rRmhfVDdPNzFmb3VoNlNBQjg5RGFjd0drTHFGVWVRQkJsX3dDby5odG1sIiwicmVwb3J0X2lkIjoiem1UR2hRcVQ1Y3JqYXBMVFJFVkh5UW8xIn19fZ9r5g_OdCrQRJ1zvWuRLOwh7d9AV5C31dgO2snRuRecDcJHw4OVlwbwiP-DOd020EI0bf0g6QnVoq97K4lZmAk",
+      "triage": "antithesis/scratchbook/runs/iterate-3.md",
+      "fp_review": "exit3: FP (single seed); G5: FP (IP churn -> CMS quorum loss); command exits: FP (Cluster() outside try); G2 cond cross-table: real (acked-transfer-overwritten/committed-rows-read-absent family, no restart)",
+      "session_id": "8a675b982580d05ca4214be32ffde643-63-12"
+    },
+    {
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:772c2f7e081f",
+      "workload_image_layers": "db8842a3bd151796",
+      "minutes": 30,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_termination=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.clock_skip=true"
+      ],
+      "launched_at": "2026-10-08T17:11:43Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "live_checks": [],
+      "purpose": "fix-verify",
+      "variant": "fixverify-acked-transfer-overwritten",
+      "n": 2,
+      "run_id": "0e1949506e0ec5407eb17348c627c8a3-63-12",
+      "purpose_note": "full faults on acked-transfer-overwritten-patched build; separate missing-row symptom from acked-transfer-overwritten",
+      "reported_at": "2026-10-08T18:02:58Z",
+      "report_url": "https://honey-whale.antithesis.com/report/1m1Ur9qEIU4qMIV6bVIJALEA/TZXCICByv8d1_9cYxLwOit-JGi3xkzPHbasNfHMMLcE.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA4VDE2OjUzOjMzLjg0MzAwNTQ2MloiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiVFpYQ0lDQnl2OGQxXzljWXhMd09pdC1KR2kzeGt6UEhiYXNOZkhNTUxjRS5odG1sIiwicmVwb3J0X2lkIjoiMW0xVXI5cUVJVTRxTUlWNmJWSUpBTEVBIn19fYRMwrkd2H--hy32gsQF2UrB5cW93Y848VKOv1g5hnJSqlsgMIE2PmVkcLF8QqXEllbUn3BJk5KjacXN5k-TeQg",
+      "triage": "antithesis/scratchbook/runs/fix-verify-acked-transfer-overwritten-2.md",
+      "fp_review": "same 3 FPs; G1 conservation 1: suspect (coordinator just rejoined under new IP)",
+      "session_id": "944e1bc169be38d94d4565f7bb2f7819-63-12"
+    },
+    {
+      "purpose": "fix-verify",
+      "variant": "fixverify-committed-rows-read-absent",
+      "n": 1,
+      "run_id": "ccc9549ea4ea7c01d4f19e8f3c4ba0d9-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:ccc68eedd897",
+      "workload_image_layers": "b73d7b44a5aeec14",
+      "minutes": 30,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord"
+      ],
+      "launched_at": "2026-10-08T18:02:58Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "fix-verify committed-rows-read-absent (+acked-transfer-overwritten), network only",
+      "live_checks": [],
+      "reported_at": "2026-10-08T18:54:17Z",
+      "report_url": "https://honey-whale.antithesis.com/report/KfY7B2UuKvIX6-mUzOaSxMLD/ISGa8Ar3YHqzNOLEqCKFE9EbNKaW6MSN8s9nJeOA5_Y.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA4VDE3OjQ4OjAwLjYyMDk3MDEwN1oiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiSVNHYThBcjNZSHF6Tk9MRXFDS0ZFOUViTkthVzZNU044czluSmVPQTVfWS5odG1sIiwicmVwb3J0X2lkIjoiS2ZZN0IyVXVLdklYNi1tVXpPYVN4TUxEIn19fYHSb1vJZI8JwTCuQ9ZVhszgoXnANQW1WQmRA6j643Q0TlgzZfuZSh7oot8SsxgMJ1F9JY2RuT2LiNcqCTdqMw8",
+      "triage": "inline (logs/props-ccc9549ea4ea7c01d4f19e8f3c4ba0d9-63-12.json)",
+      "fp_review": "same G1 signatures as acked-transfer-overwritten/committed-rows-read-absent (reviewed earlier); no new property classes",
+      "note": "acked-transfer-overwritten+committed-rows-read-absent patches: conservation 38, missing-row 3 -> committed-rows-read-absent fix fails; analysis agent started",
+      "session_id": "49beb7b196b7523bb49548acf36726c7-63-12"
+    },
+    {
+      "purpose": "iterate",
+      "variant": "current",
+      "n": 4,
+      "run_id": "d59511b5246c23175adaf49eec9cfeae-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:63f7cc96e480",
+      "workload_image_layers": "59ddd8497535fdc8",
+      "minutes": 30,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_termination=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.clock_skip=true"
+      ],
+      "launched_at": "2026-10-08T18:37:24Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "full faults after harness fixes (seeds, static IPs, connect retry)",
+      "live_checks": [],
+      "reported_at": "2026-10-08T19:28:31Z",
+      "report_url": "https://honey-whale.antithesis.com/report/UqrKVMj_GYKoSwH214E9k-55/-wUPEd0enCQ95AFtBqXT6Q2CBmFAh6STLDboBRJyD0U.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA4VDE4OjE5OjUyLjU5MzI4MjYwOFoiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiLXdVUEVkMGVuQ1E5NUFGdEJxWFQ2UTJDQm1GQWg2U1RMRGJvQlJKeUQwVS5odG1sIiwicmVwb3J0X2lkIjoiVXFyS1ZNal9HWUtvU3dIMjE0RTlrLTU1In19fShbOf9MEd5TA5g4C_CJgAKHIxNI3_0DFXcSzkqE7e6XkpQ1F7W9CV6UtShB54WtAyUkqbpWWuMnPkhqSAV0vgY",
+      "triage": "inline (logs/props-d59511b5246c23175adaf49eec9cfeae-63-12.json)",
+      "fp_review": "harness fixes effective: no container exits, no command failures, G2-G5 pass; G1 conservation 3 + retried-transfer 1 = acked-transfer-overwritten signature (real); G4 IN-read Reachable unhit (coverage)",
+      "session_id": "140a15fa57294b6276e359aa26d1f070-63-12"
+    },
+    {
+      "purpose": "hunt",
+      "variant": "current",
+      "n": 1,
+      "run_id": "42229a5d3c2580dbfcf6cf6dd13c5cc5-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:63f7cc96e480",
+      "workload_image_layers": "59ddd8497535fdc8",
+      "minutes": 300,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "antithesis.performance_tier=turbo",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_termination=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.clock_skip=true"
+      ],
+      "launched_at": "2026-10-08T19:28:31Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "current, full faults, 300m, first long hunt",
+      "live_checks": [
+        {
+          "at": "2026-10-08T19:36:22Z",
+          "query": "non-G1 always-family messages",
+          "hits": 0
+        },
+        {
+          "at": "2026-10-09T01:52:30Z",
+          "query": "all always-family (n<=1000 each)",
+          "hits": "see logs (bxuvi7ezg): new G2/G3/G4/G5 failures in kill runs; G2 read-back in no-kill run"
+        }
+      ],
+      "reported_at": "2026-10-09T01:59:40Z",
+      "report_url": "https://honey-whale.antithesis.com/report/NktZzXJr0UO579BjgdL5Mfs8/WahXSL5t4V92DlKQs1q_ypABQrL0eoB0t4m9lTR2aRQ.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA5VDAwOjQ1OjUwLjE3MzY4NTQyNloiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiV2FoWFNMNXQ0VjkyRGxLUXMxcV95cEFCUXJMMGVvQjB0NG05bFRSMmFSUS5odG1sIiwicmVwb3J0X2lkIjoiTmt0WnpYSnIwVU81NzlCamdkTDVNZnM4In19fWrNFp5DNmFdjXAMDyLShAIiDFVbFBq3o-ivCj39i3X6r5xWrcK63PhPBBMfCW9XFdEfA-U-ykSWQds9ci3dMAE",
+      "triage": "antithesis/scratchbook/runs/hunt-1.md",
+      "fp_review": "G3/G4/G2 kill-dependent: suspect (unsafe-startup confound); G5 every-node: suspect (window 120s < catchup_on_start_fail_latency 900s; node stuck in catch-up)",
+      "session_id": "1ded98886bc9d4fd587617be6d429d18-63-12"
+    },
+    {
+      "purpose": "hunt",
+      "variant": "current",
+      "n": 2,
+      "run_id": "a0534fbf86e5081d495f8d15d9ccf329-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:63f7cc96e480",
+      "workload_image_layers": "59ddd8497535fdc8",
+      "minutes": 300,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "antithesis.performance_tier=turbo",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_termination=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3"
+      ],
+      "launched_at": "2026-10-08T19:28:31Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "current, no clock jumps, 300m",
+      "live_checks": [
+        {
+          "at": "2026-10-08T19:36:22Z",
+          "query": "non-G1 always-family messages",
+          "hits": 0
+        },
+        {
+          "at": "2026-10-09T01:52:30Z",
+          "query": "all always-family (n<=1000 each)",
+          "hits": "see logs (bxuvi7ezg): new G2/G3/G4/G5 failures in kill runs; G2 read-back in no-kill run"
+        }
+      ],
+      "reported_at": "2026-10-09T01:59:40Z",
+      "report_url": "https://honey-whale.antithesis.com/report/Yrr8xPIhKvFwB5cxwbUjo71N/Tm3uCc675KWtl0XjMrwy-dUm6jzy_CBpF7n9t6Abiac.html?auth=v2.public.eyJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiVG0zdUNjNjc1S1d0bDBYak1yd3ktZFVtNmp6eV9DQnBGN245dDZBYmlhYy5odG1sIiwicmVwb3J0X2lkIjoiWXJyOHhQSWhLdkZ3QjVjeHdiVWpvNzFOIn19LCJuYmYiOiIyMDI2LTEwLTA5VDAwOjUxOjEzLjYzNDE5NjA3NloifVZ8QpGpm__rQ6n-dlgWEtEZ7XGKnMDfCqEmwwxwDmgxYqPfOKeW-AW2lt_3S8p9YYsaHUvE6MqbNI69FpADSwI",
+      "triage": "antithesis/scratchbook/runs/hunt-2.md",
+      "fp_review": "G2/G3: suspect (unsafe-startup confound); G5 every-node: suspect liveness lead (catch-up never converged after a clean graceful restart, -7253961278733688370@267.81)",
+      "session_id": "0ba35580a8c36db4491752db4c675135-63-12"
+    },
+    {
+      "purpose": "hunt",
+      "variant": "current",
+      "n": 3,
+      "run_id": "c16f5775181c00d7a3ac9d8a7607de32-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:63f7cc96e480",
+      "workload_image_layers": "59ddd8497535fdc8",
+      "minutes": 360,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "antithesis.performance_tier=turbo",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_termination=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.clock_skip=true"
+      ],
+      "launched_at": "2026-10-08T19:28:31Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "current, full faults, 360m longest",
+      "live_checks": [
+        {
+          "at": "2026-10-08T19:36:22Z",
+          "query": "non-G1 always-family messages",
+          "hits": 0
+        },
+        {
+          "at": "2026-10-09T01:52:30Z",
+          "query": "all always-family (n<=1000 each)",
+          "hits": "see logs (bxuvi7ezg): new G2/G3/G4/G5 failures in kill runs; G2 read-back in no-kill run"
+        }
+      ],
+      "reported_at": "2026-10-09T02:28:57Z",
+      "report_url": "https://honey-whale.antithesis.com/report/xeFXBGscPgpTrEh3HgeiBn3r/ZXj-4QdSO3r-ImhAo-tFncJktsaXb_DSbBvEmgwtQGw.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA5VDAxOjI4OjEzLjg5MzA2MDk0NVoiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiWlhqLTRRZFNPM3ItSW1oQW8tdEZuY0prdHNhWGJfRFNiQnZFbWd3dFFHdy5odG1sIiwicmVwb3J0X2lkIjoieGVGWEJHc2NQZ3BUckVoM0hnZWlCbjNyIn19fSdJ3KhdpBr-SnSTAwI4wfBSIzIOBLRhj70vJ-rqgY2vQBH3fQ21j3BM1XbZJNgZLDBQ_nC_jq4KZbpqZhE2kAU",
+      "note": "G1 634/409 conservation, G2 1, G3 33/144, G4 5, G5 any-node 18 + every-node 52, node2 exit 3 x45, output volume",
+      "triage": "antithesis/scratchbook/runs/hunt-3.md",
+      "fp_review": "node2 exit 3: real SUT candidate (journal CRC on torn active segment after SIGKILL -> never restarts) -> journal-unreadable-after-kill; G5 any-node: consequence; G1/G2 acked-transfer-overwritten/committed-rows-read-absent; G3/G4 suspect (unsafe-startup); output volume harness noise",
+      "session_id": "7e70f29746254c504b3f8fdbaa2a9801-63-12"
+    },
+    {
+      "purpose": "hunt",
+      "variant": "current",
+      "n": 4,
+      "run_id": "1d499fea4f9ce6971e413c613736faf2-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:63f7cc96e480",
+      "workload_image_layers": "59ddd8497535fdc8",
+      "minutes": 300,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "antithesis.performance_tier=turbo",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3"
+      ],
+      "launched_at": "2026-10-08T19:28:31Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "current, no node kills, 300m",
+      "live_checks": [
+        {
+          "at": "2026-10-08T19:36:22Z",
+          "query": "non-G1 always-family messages",
+          "hits": 0
+        },
+        {
+          "at": "2026-10-09T01:52:30Z",
+          "query": "all always-family (n<=1000 each)",
+          "hits": "see logs (bxuvi7ezg): new G2/G3/G4/G5 failures in kill runs; G2 read-back in no-kill run"
+        }
+      ],
+      "reported_at": "2026-10-09T01:59:40Z",
+      "report_url": "https://honey-whale.antithesis.com/report/fsuUPPeUhgYCGq2LvZsJZ8d_/h5mxMMzBbn64mgpOwAlUeWFw6Qz1sXSt8CC8So_UiDc.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA5VDAwOjI0OjQ4LjM2MjY1ODEyM1oiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiaDVteE1NekJibjY0bWdwT3dBbFVlV0Z3NlF6MXNYU3Q4Q0M4U29fVWlEYy5odG1sIiwicmVwb3J0X2lkIjoiZnN1VVBQZVVoZ1lDR3EyTHZac0paOGRfIn19fXf3jvb122sZ-4y4nVBJTQcerBZo0DCvMeEV-7gJtIAYrllzdzZWaLw_Uw6xtClTY5HNIBY2xT7uaSGhz2pQEgc",
+      "triage": "antithesis/scratchbook/runs/hunt-4.md",
+      "fp_review": "G2 read-back + final (no kills): real, committed-rows-read-absent family (rows read absent), not new",
+      "session_id": "4ac52a69ccff8096cfcff76f292a0b0f-63-12"
+    },
+    {
+      "purpose": "hunt",
+      "variant": "cfg-durable",
+      "n": 5,
+      "run_id": "823089f61fb59e015811e6e85ed39aa6-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:63f7cc96e480",
+      "workload_image_layers": "59ddd8497535fdc8",
+      "minutes": 300,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "antithesis.performance_tier=turbo",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.clock_skip=true",
+        "custom.include_for_node_termination=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3"
+      ],
+      "launched_at": "2026-10-09T01:59:40Z",
+      "status": "completed (reported after its result timeout)",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "config variant: commitlog batch + journal BATCH; full faults; separates lost-unsynced-data from kill-dependent failures",
+      "live_checks": [
+        {
+          "at": "2026-10-09T08:40Z",
+          "query": "non-G1 always",
+          "hits": "G3 30+57, G2 10/13/6, G5 every-node 25; G4 0; InvalidCrc 0"
+        }
+      ],
+      "reported_at": "2026-10-09T08:40:55Z",
+      "report_url": "https://honey-whale.antithesis.com/report/BQ97m0_0OK6XKz1Uo5uogvqw/xeKj9Tctp8rQjonU4TtzS1-ajk1aoYGmCD7saKC6S6c.html?auth=v2.public.eyJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoieGVLajlUY3RwOHJRam9uVTRUdHpTMS1hamsxYW9ZR21DRDdzYUtDNlM2Yy5odG1sIiwicmVwb3J0X2lkIjoiQlE5N20wXzBPSzZYS3oxVW81dW9ndnF3In19LCJuYmYiOiIyMDI2LTEwLTA5VDA3OjIxOjM4LjQ3OTAzMDQ4OVoifTV_mFBRxwbmCrK8-5uma79uee2NV0C_p1bIMpmGQygC1Y6xRPuPaNcLfeoBHMJqlxDONOsQPDpPH1_vG9JvQws",
+      "fp_review": "G3/G2 failures: false-positive (harness: ALLOW_UNSAFE_STARTUP), per adversarial/lost-writes-under-unsafe-startup",
+      "triage": "antithesis/scratchbook/runs/hunt-5.md",
+      "session_id": "1851cf5b18e98018ebd91787f99583f8-63-12"
+    },
+    {
+      "purpose": "hunt",
+      "variant": "cfg-rebootstrap",
+      "n": 6,
+      "run_id": "0458bd361e685fcd215c0f52bee40ab2-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:63f7cc96e480",
+      "workload_image_layers": "59ddd8497535fdc8",
+      "minutes": 300,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "antithesis.performance_tier=turbo",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.clock_skip=true",
+        "custom.include_for_node_termination=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3"
+      ],
+      "launched_at": "2026-10-09T01:59:40Z",
+      "status": "completed (reported after its result timeout)",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "config variant: stop_marker REBOOTSTRAP (documented safe restart); full faults",
+      "live_checks": [
+        {
+          "at": "2026-10-09T08:40Z",
+          "query": "non-G1 always",
+          "hits": "G5 any-node 24, plain 23, every-node 126; no G2/G3/G4 failures"
+        }
+      ],
+      "reported_at": "2026-10-09T08:40:55Z",
+      "report_url": "https://honey-whale.antithesis.com/report/MzDTE5xeytiRYxlSU2QaPt3H/dQRasNugLBetHrdFh06kFBSzBkIjguaP46LjH0QqDAc.html?auth=v2.public.eyJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiZFFSYXNOdWdMQmV0SHJkRmgwNmtGQlN6QmtJamd1YVA0NkxqSDBRcURBYy5odG1sIiwicmVwb3J0X2lkIjoiTXpEVEU1eGV5dGlSWXhsU1UyUWFQdDNIIn19LCJuYmYiOiIyMDI2LTEwLTA5VDA3OjIxOjA2LjI4NjY2NzM1NloiffvB0x3th9WM0CdvcM7LhpMEg3QFwjOaBmluWAcCpAG10eQn6HWe-NPcIauVmggv5jASS6txe5a4EzGcS8NNMAQ",
+      "fp_review": "G2/G3/G4 pass with evidence; G1 fails (acked-transfer-overwritten/committed-rows-read-absent persist under safe restart); G5 fails (REBOOTSTRAP availability lead rebootstrap-slow-to-serve)",
+      "triage": "antithesis/scratchbook/runs/hunt-6.md",
+      "session_id": "aee33d85dc17376cecc395835c626f8e-63-12"
+    },
+    {
+      "purpose": "hunt",
+      "variant": "current",
+      "n": 7,
+      "run_id": "2accaa077ceeb8bdd68fb53122e70ba4-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:63f7cc96e480",
+      "workload_image_layers": "59ddd8497535fdc8",
+      "minutes": 300,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "antithesis.performance_tier=turbo",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.clock_skip=true"
+      ],
+      "launched_at": "2026-10-09T01:59:40Z",
+      "status": "completed",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "no node kills, with clock jumps",
+      "live_checks": [],
+      "reported_at": "2026-10-09T07:56:11Z",
+      "report_url": "https://honey-whale.antithesis.com/report/PsYGW6qkZ131C1VK_mXUshL3/eFLnc_1S4k4AJSeu1aN3MEMfL4KxOMEGfw6SimvT3S0.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA5VDA2OjQyOjU5LjU1OTAxOTMzNloiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiZUZMbmNfMVM0azRBSlNldTFhTjNNRU1mTDRLeE9NRUdmdzZTaW12VDNTMC5odG1sIiwicmVwb3J0X2lkIjoiUHNZR1c2cWtaMTMxQzFWS19tWFVzaEwzIn19fbIJ5weDtJlHa4gRSSiCNm5OL60jdDJ_N4xHi0lkuzE7Xls_bk7ZgNYaX4BHmVptMDZUBCRFmCTWCUTany54pAY",
+      "triage": "inline (logs/props-2accaa077ceeb8bdd68fb53122e70ba4-63-12.json)",
+      "fp_review": "no kills: only G1 (acked-transfer-overwritten 1447/1241, committed-rows-read-absent 47+35) and G2 conditional cross-table 26 (acked-transfer-overwritten/committed-rows-read-absent family); G3/G4/G5 all pass -> supports kill-dependence of G3/G4 failures",
+      "session_id": "d0936b616a458687c6e2e7eed02a14b8-63-12"
+    },
+    {
+      "purpose": "fix-verify",
+      "variant": "fixverify-journal-unreadable-after-kill",
+      "n": 1,
+      "run_id": "72728337f011528b627e81d1f2315090-63-12",
+      "ref": "e874e3a90b1942b945477e6d9ba03880b4f4a19d",
+      "workload_image": "cassandra-accord-workload:63f7cc96e480",
+      "workload_image_layers": "59ddd8497535fdc8",
+      "minutes": 120,
+      "launcher": "boost_test",
+      "fault_params": [
+        "custom.boost.name=accord",
+        "antithesis.performance_tier=turbo",
+        "custom.include_for_node_pause=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_throttle=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.include_for_node_termination=cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+        "custom.clock_skip=true"
+      ],
+      "launched_at": "2026-10-09T02:55:25Z",
+      "status": "completed (reported after its result timeout)",
+      "triage_skill": "anthropic-skills:antithesis-triage",
+      "purpose_note": "fix-verify journal-unreadable-after-kill, same faults as hunt-3 (found run)",
+      "live_checks": [],
+      "reported_at": "2026-10-09T07:56:11Z",
+      "report_url": "https://honey-whale.antithesis.com/report/P_R9YbTsqw1km0R8_OuKPW9a/3WKRRGDGU2s5GEzzNXEnyJkDvHQuDK6jdxs85Pc_4N0.html?auth=v2.public.eyJuYmYiOiIyMDI2LTEwLTA5VDA0OjM0OjU5LjE1MjkxMDA1MFoiLCJzY29wZSI6eyJSZXBvcnRTY29wZVYxIjp7ImFzc2V0IjoiM1dLUlJHREdVMnM1R0V6ek5YRW55SmtEdkhRdURLNmpkeHM4NVBjXzROMC5odG1sIiwicmVwb3J0X2lkIjoiUF9SOVliVHNxdzFrbTBSOF9PdUtQVzlhIn19fRomXZHON3xxI53t10DadoDAbjC5JHXyVKX81mFUjz75a6IDVaDhI9ZvnLi6ioaJHHotzmBnNvxUXsITP09izAY",
+      "triage": "inline (logs/props-72728337f011528b627e81d1f2315090-63-12.json)",
+      "fp_review": "node2 exit 3 x1 (vs 45 in hunt-3); torn CRC-0 records on node2 ~394.5; G1/G3/G4/G5 as in other kill runs; analysis agent running",
+      "session_id": "6f7486d26d0e3d29f327c4d4c0062a1c-63-12"
+    }
+  ],
+  "control": {
+    "reproduced": null,
+    "run_id": "",
+    "first_failure_vtime": null,
+    "kind": "historical",
+    "moot": true,
+    "prefix_hunts": 0,
+    "moot_reason": "acked-transfer-overwritten on current passed the adversarial check (stands)"
+  },
+  "green_at": "2026-10-08T17:11:43Z",
+  "green_full_at": "2026-10-08T19:28:31Z",
+  "violations": [
+    {
+      "id": "acked-transfer-overwritten",
+      "guarantee": "G1",
+      "variant": "current",
+      "run_id": "e4947374c51cfdaaffd0d6ff6ae5dc10-63-12",
+      "rca": "antithesis/scratchbook/rca/acked-transfer-overwritten.md",
+      "patch": "antithesis/fixes/acked-transfer-overwritten.patch",
+      "blind_hash": "sha256:1c4cd312c07e9049 (rca/acked-transfer-overwritten.md+fixes/acked-transfer-overwritten.patch, 2026-10-08T16:11Z)",
+      "upstream_verdict": "not known upstream (no JIRA/commit match); suspect defaults unchanged on trunk; NPE part fixed on trunk by CASSANDRA-21662",
+      "fix_verify": "not verified: acked-transfer-overwritten-only 0/682 (0b77f2b9, network) and 1/345 (0e194950, full faults, suspect); acked-transfer-overwritten+committed-rows-read-absent build 38/730 (ccc9549e) with committed-rows-read-absent fail-safe never activated -> acked-transfer-overwritten patch not effective; earlier clean run = timeline luck",
+      "found_live": true,
+      "adversarial": "stands (adversarial/acked-transfer-overwritten.md)",
+      "summary": "stale read of acknowledged credit then lost update; audit total != 12000 / odd xfers sum; all from bank_autoretry; network faults only; also: seeded rows read as missing (null / 5 of 12 rows) in read txns",
+      "moments": [
+        "3115707109627864019@238.6926",
+        "2977298595378160927@249.7871",
+        "2977298595378160927@250.45"
+      ],
+      "title": "an acknowledged transfer is overwritten, and the bank total stops adding up",
+      "adversarial_file": "antithesis/scratchbook/adversarial/acked-transfer-overwritten.md"
+    },
+    {
+      "id": "committed-rows-read-absent",
+      "guarantee": "G1",
+      "variant": "current",
+      "run_id": "0b77f2b9a794d868ae0d8e6cca24880e-63-12",
+      "rca": "antithesis/scratchbook/rca/committed-rows-read-absent.md",
+      "patch": "antithesis/fixes/committed-rows-read-absent.patch (diagnostic + fail-safe)",
+      "blind_hash": "sha256:e17249845e4080a7 (rca/committed-rows-read-absent.md+fixes/committed-rows-read-absent.patch, 2026-10-08T17:37:07Z)",
+      "upstream_verdict": "not known upstream; probably present on trunk (paths unchanged; defect line unidentified)",
+      "fix_verify": "failed: committed-rows-read-absent diagnostic/fail-safe never fired in ccc9549e yet rows still read absent -> loss is not in replica ReadData reply; next suspect coordinator merge or storage read",
+      "found_live": false,
+      "adversarial": "stands (adversarial/committed-rows-read-absent.md)",
+      "summary": "committed (seeded) rows read as absent by a transaction: \"a transfer transaction reads both of its accounts\" (fixverify-acked-transfer-overwritten, iterate-1) and \"every seeded bank account is visible to an audit transaction\" (iterate-1, iterate-2); persists with acked-transfer-overwritten patch",
+      "title": "committed rows are read as absent",
+      "adversarial_file": "antithesis/scratchbook/adversarial/committed-rows-read-absent.md"
+    },
+    {
+      "id": "journal-unreadable-after-kill",
+      "guarantee": "G5",
+      "variant": "current",
+      "run_id": "c16f5775181c00d7a3ac9d8a7607de32-63-12",
+      "rca": "antithesis/scratchbook/rca/journal-unreadable-after-kill.md",
+      "patch": "antithesis/fixes/journal-unreadable-after-kill.patch",
+      "blind_hash": "sha256:6c301bc611abcf50 (2026-10-09T02:50:50Z)",
+      "upstream_verdict": "not known as a bug; opt-in crc_failure_on_rebuild_policy IGNORE_CRC_ZERO_RECORDS exists (CASSANDRA-21355) but default FAIL; present on trunk (journal rebuild code unchanged)",
+      "fix_verify": "verified with a caveat in 72728337f011528b627e81d1f2315090-63-12: torn CRC-0 tail recurred on node2 (~394.5), patch logged \"Unfinished journal entry ... treating it as end of segment\" and journal replay proceeded without error (branch ended before \"Startup complete\"); 0 journal-error exits vs 45 unpatched in hunt-3",
+      "found_live": false,
+      "adversarial": "a stands (journal CRC on torn segment blocks restart under every stop-marker policy incl. REBOOTSTRAP; 3/3 hunts); b harness-caused (whole cluster killed, 120s window undocumented) -> adversarial/journal-unreadable-after-kill.md",
+      "summary": "after SIGKILL mid-append, Accord journal cannot be opened (InvalidCrc Read 0 on rebuild of active segment, crc_failure_on_rebuild_policy=FAIL) under any stop-marker policy incl. REBOOTSTRAP; node never restarts; seen in hunts 1,2,3",
+      "title": "a node killed during an Accord journal append can never restart",
+      "adversarial_file": "antithesis/scratchbook/adversarial/journal-unreadable-after-kill.md"
+    },
+    {
+      "id": "lost-writes-under-unsafe-startup",
+      "guarantee": "G3",
+      "variant": "current",
+      "run_id": "823089f61fb59e015811e6e85ed39aa6-63-12",
+      "rca": "not applicable (harness-caused false positive)",
+      "patch": "",
+      "blind_hash": "",
+      "upstream_verdict": "",
+      "fix_verify": "not run (stopped)",
+      "found_live": true,
+      "adversarial": "harness-caused (adversarial/lost-writes-under-unsafe-startup.md): only with documented-unsafe ALLOW_UNSAFE_STARTUP (Accord writes applied without commitlog, recovered via journal replay that trusts local state); G3 passes 146/632/1014 under REBOOTSTRAP (hunt-6)",
+      "summary": "acknowledged writes missing after node kill/restart; persists with commitlog batch + journal BATCH (hunt-5) under ALLOW_UNSAFE_STARTUP; absent under REBOOTSTRAP (hunt-6), which instead fails availability",
+      "title": "acknowledged writes lost after node kills, only under our unsafe restart setting",
+      "adversarial_file": "antithesis/scratchbook/adversarial/lost-writes-under-unsafe-startup.md"
+    }
+  ],
+  "stop": {
+    "code": "S8",
+    "phase": "P10",
+    "reason": "fix-verify journal-unreadable-after-kill run 72728337f011528b627e81d1f2315090-63-12 (120m, launched 02:55Z) has no result 150 min after launch; last status in_progress. No relaunch; no further launches. Finishing triage of hunts 5-7 up to their own timeouts (07:59Z), then summary.",
+    "at": "2026-10-09T05:25:48Z"
+  },
+  "_shapes": {
+    "guarantee": {
+      "id": "G1",
+      "slug": "",
+      "rank": 1,
+      "workload": "pending",
+      "control": false,
+      "catalog_status": ""
+    },
+    "run": {
+      "purpose": "setup",
+      "variant": "current",
+      "_variant_values": "current | prefix | fixverify-<id>",
+      "n": 1,
+      "run_id": "",
+      "ref": "",
+      "workload_image": "",
+      "workload_image_layers": "",
+      "minutes": 5,
+      "launcher": "",
+      "fault_params": [],
+      "launched_at": "",
+      "last_polled_at": "",
+      "status": "",
+      "triage": "",
+      "triage_skill": "",
+      "fp_review": "",
+      "control_failed": null,
+      "note": "",
+      "live_checks": [],
+      "purpose_note": "",
+      "report_url": "",
+      "reported_at": "",
+      "session_id": ""
+    },
+    "violation": {
+      "id": "acked-transfer-overwritten",
+      "guarantee": "",
+      "variant": "current",
+      "run_id": "",
+      "rca": "",
+      "patch": "",
+      "blind_hash": "",
+      "upstream_verdict": "",
+      "fix_verify": "",
+      "found_live": false,
+      "adversarial": ""
+    },
+    "_note": "Entry shapes for the arrays above. Copy a shape when adding an entry; never edit _shapes.",
+    "fault_need": {
+      "fault_type": "",
+      "needed_by": "",
+      "available": null,
+      "user_told_at": ""
+    },
+    "recurring_warning": {
+      "property": "",
+      "runs": [],
+      "counts": [],
+      "told_user_at": "",
+      "investigation": ""
+    }
+  },
+  "live_checks": {
+    "fail_field": ".antithesis_assert.condition == false"
+  },
+  "leads": [
+    {
+      "id": "catchup-stalls-after-clean-restart",
+      "what": "Accord startup catch-up does not converge after node restart (clean graceful stop in hunt-2); G5 every-node failures; hits 900s catchup_on_start_fail_latency in hunt-1",
+      "evidence": "runs/hunt-2.md, runs/hunt-1.md",
+      "status": "unconfirmed: G5 window (120s) shorter than SUT catch-up bound",
+      "title": "a node restarted cleanly does not finish its Accord startup catch-up within 120 s"
+    },
+    {
+      "id": "unsafe-startup-stale-data",
+      "what": "Lost acknowledged writes / stale reads after SIGKILL restart with ALLOW_UNSAFE_STARTUP; some rows acked 60-75s before kill (> 10s commitlog window)",
+      "evidence": "runs/hunt-1.md, runs/hunt-2.md",
+      "status": "harness-caused (ALLOW_UNSAFE_STARTUP), see adversarial/lost-writes-under-unsafe-startup.md; applies to kill-dependent G2/G3/G4 suspects in hunts 1-3,5 and fixverify-journal-unreadable-after-kill",
+      "title": "lost or stale data after kills under the unsafe restart setting (became the lost-writes-under-unsafe-startup false positive)"
+    },
+    {
+      "id": "rebootstrap-slow-to-serve",
+      "what": "REBOOTSTRAP restart stuck 12+ min locally",
+      "evidence": "logs/local-rebootstrap-stuck.txt",
+      "status": "confirmed in Antithesis hunt-6: with REBOOTSTRAP no transaction succeeds within 120s after faults stop (24 any-node, 126 every-node) - availability lead, window vs 900s catch-up bound caveat applies",
+      "title": "with the safe restart policy, transactions often fail for more than 120 s after faults stop"
+    },
+    {
+      "id": "compaction-log-blocks-restart",
+      "what": "after SIGKILL during compaction node2 failed startup: \"inconsistent disk state for transaction pa_txn_compaction_*.log\" (LogTransaction, system_schema column_masks) - Cassandra core crash-consistency, not Accord",
+      "evidence": "logs/fv3-exit3--4857019936188895155.log (run 72728337…, vtime 603.21)",
+      "status": "not reviewed (no FP/adversarial check)",
+      "title": "a node killed during compaction fails to start with \"inconsistent disk state\" (Cassandra core, not Accord)"
+    }
+  ]
+}

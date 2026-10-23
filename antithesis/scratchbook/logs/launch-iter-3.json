@@ -1,0 +1,22 @@
+Image already in a registry, skipping push: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-workload:772c2f7e081f@sha256:3beb449a59d3e475cdac94db995581ec7739f710653f4dc9ca9a87ef784a61d7
+Image already in a registry, skipping push: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-cassandra:e874e3a9@sha256:c0e16ebe51eb5fdead2c5a5d5251acb5d4e9f7f7e6f1be9b39cf1a1a1a063cc9
+Building config image: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/snouty-config:20261008-171103-3523
+Pushing config image: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/snouty-config:20261008-171103-3523
+Config image pushed successfully: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/snouty-config@sha256:824c5d57089aa27eb9a49632ba2a387066d89b900fe506a30af5649a585e00be
+
+Requesting Antithesis test run with params:
+{
+  "antithesis.test_name": "boost/cassandra-accord/cassandra@e874e3a9",
+  "antithesis.description": "boost iterate #3: first run with full fault set (pause, throttle, kill/restart, clock jumps), G1-G5",
+  "antithesis.duration": "30",
+  "antithesis.source": "boost-cassandra-accord-current",
+  "antithesis.config_image": "snouty-config@sha256:824c5d57089aa27eb9a49632ba2a387066d89b900fe506a30af5649a585e00be",
+  "custom.boost.name": "accord",
+  "custom.include_for_node_pause": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+  "custom.include_for_node_throttle": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+  "custom.include_for_node_termination": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+  "custom.clock_skip": "true"
+}
+{
+  "runId": "126cbacda11c1e49afda49c425a00f31-63-12"
+}

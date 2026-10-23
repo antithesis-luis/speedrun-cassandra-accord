@@ -1,0 +1,1 @@
+s|stop_marker_failure_policy: ALLOW_UNSAFE_STARTUP|stop_marker_failure_policy: REBOOTSTRAP|

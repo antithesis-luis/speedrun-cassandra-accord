@@ -1,0 +1,2 @@
+cassandra-driver==3.30.1
+antithesis==0.4.0

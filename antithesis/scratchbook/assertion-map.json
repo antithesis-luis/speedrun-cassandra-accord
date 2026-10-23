@@ -1,0 +1,398 @@
+{
+ "a check during the run verified sampled acknowledged durable writes": {
+  "file": "antithesis/test/v1/accord/anytime_durable_sample.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "sometimes"
+ },
+ "a conditional cross-table write read the same token in every slot of its group": {
+  "file": "antithesis/test/v1/accord/parallel_driver_pair_writes.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "always"
+ },
+ "a conditional cross-table write was declined because another writer changed the group": {
+  "file": "antithesis/test/v1/accord/parallel_driver_pair_writes.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "sometimes"
+ },
+ "a conditional insert of a fresh id found no existing row for it": {
+  "file": "antithesis/test/v1/accord/parallel_driver_durable_writes.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "always_or_unreachable"
+ },
+ "a conditional single-statement write on a full-mode table was applied": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_register.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "sometimes"
+ },
+ "a consistency-level ONE read right after an acknowledged plain write returned that write": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_register.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "sometimes"
+ },
+ "a cross-table read saw a group rewritten since this reader's previous read": {
+  "file": "antithesis/test/v1/accord/parallel_driver_pair_reads.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "sometimes"
+ },
+ "a cross-table read transaction saw the same token in every slot of a group": {
+  "file": "antithesis/test/v1/accord/parallel_driver_pair_reads.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "always"
+ },
+ "a cross-table write of one token to four partitions was acknowledged": {
+  "file": "antithesis/test/v1/accord/parallel_driver_pair_writes.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "sometimes"
+ },
+ "a cross-table write transaction ended with an unknown outcome": {
+  "file": "antithesis/test/v1/accord/parallel_driver_pair_writes.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "reachable"
+ },
+ "a declined conditional write on a full-mode table reports a current version at least as new as every acknowledged one": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_register.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "always"
+ },
+ "a durable write ended with an unknown outcome": {
+  "file": "antithesis/test/v1/accord/parallel_driver_durable_writes.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "reachable"
+ },
+ "a durable write transaction spanning three partitions was acknowledged": {
+  "file": "antithesis/test/v1/accord/parallel_driver_durable_writes.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "sometimes"
+ },
+ "a final audit after faults stopped saw committed transfers": {
+  "file": "antithesis/test/v1/accord/eventually_bank_audit.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "sometimes"
+ },
+ "a final check after faults stopped saw logged-batch groups written": {
+  "file": "antithesis/test/v1/accord/eventually_pair_check.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "sometimes"
+ },
+ "a final check after faults stopped saw transactional groups written": {
+  "file": "antithesis/test/v1/accord/eventually_pair_check.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "sometimes"
+ },
+ "a final check found a write of unknown outcome applied": {
+  "file": "antithesis/test/v1/accord/eventually_durable_check.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "sometimes"
+ },
+ "a final check verified acknowledged durable writes from the ledgers": {
+  "file": "antithesis/test/v1/accord/eventually_durable_check.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "sometimes"
+ },
+ "a final check verified acknowledged multi-partition durable writes in every partition": {
+  "file": "antithesis/test/v1/accord/eventually_durable_check.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "sometimes"
+ },
+ "a multi-key IN read of published registers completed": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_readers.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "reachable"
+ },
+ "a node coordinated a transaction after earlier attempts through it failed": {
+  "file": "antithesis/test/v1/accord/eventually_recovery_probe.py",
+  "guarantee": "G5",
+  "property": "recovers-after-faults",
+  "type": "sometimes"
+ },
+ "a plain read of a published register returned a version newer than its published floor": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_readers.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "sometimes"
+ },
+ "a plain read of a published register sees at least the version acknowledged before the read started": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_readers.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "always"
+ },
+ "a plain read on a full-mode table returns only versions that were written": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_register.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "always"
+ },
+ "a plain read on a full-mode table returns the latest acknowledged write or a newer one": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_register.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "always"
+ },
+ "a plain write and read on a transactional table succeeded within 120 seconds after faults stopped": {
+  "file": "antithesis/test/v1/accord/eventually_recovery_probe.py",
+  "guarantee": "G5",
+  "property": "recovers-after-faults",
+  "type": "always"
+ },
+ "a plain write was read back through a different coordinator than the one that acknowledged it": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_register.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "sometimes"
+ },
+ "a plain write with an unknown outcome was later read back": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_register.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "reachable"
+ },
+ "a private-slot transfer reads the markers acknowledged before it and none from later transfers": {
+  "file": "antithesis/test/v1/accord/parallel_driver_rt_marker.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "a private-slot transfer was declined for insufficient balance": {
+  "file": "antithesis/test/v1/accord/parallel_driver_rt_marker.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "sometimes"
+ },
+ "a read started after a transfer was acknowledged sees that transfer": {
+  "file": "antithesis/test/v1/accord/parallel_driver_rt_marker.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "a read-back after a cross-table write saw the same token in every slot": {
+  "file": "antithesis/test/v1/accord/parallel_driver_pair_writes.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "always"
+ },
+ "a read-back found a write of unknown outcome applied to every slot of its group": {
+  "file": "antithesis/test/v1/accord/parallel_driver_pair_writes.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "sometimes"
+ },
+ "a read-back of a private slot sees one consistent transfer state": {
+  "file": "antithesis/test/v1/accord/parallel_driver_rt_marker.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "a reader saw a published register advance between two of its plain reads": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_readers.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "sometimes"
+ },
+ "a transaction succeeded after the first attempt once faults stopped had failed": {
+  "file": "antithesis/test/v1/accord/eventually_recovery_probe.py",
+  "guarantee": "G5",
+  "property": "recovers-after-faults",
+  "type": "sometimes"
+ },
+ "a transaction succeeded within 120 seconds after faults stopped": {
+  "file": "antithesis/test/v1/accord/eventually_recovery_probe.py",
+  "guarantee": "G5",
+  "property": "recovers-after-faults",
+  "type": "always"
+ },
+ "a transfer ended with an unknown outcome": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_transfers.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "reachable"
+ },
+ "a transfer moved a source account's entire balance": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_transfers.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "sometimes"
+ },
+ "a transfer reads balances within the bank total": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_transfers.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "a transfer reads every transfer acknowledged or observed before it started": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_transfers.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "a transfer saw transfers committed by other clients since this client last looked": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_transfers.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "sometimes"
+ },
+ "a transfer transaction reads both of its accounts": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_transfers.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "a transfer was acknowledged after resubmitting an attempt whose outcome was unknown": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_autoretry.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "sometimes"
+ },
+ "a transfer was declined because the source balance was too low": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_transfers.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "sometimes"
+ },
+ "a transfer whose outcome was unknown was later seen applied": {
+  "file": "antithesis/test/v1/accord/parallel_driver_rt_marker.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "reachable"
+ },
+ "a transfer's effect was read back through a different coordinator": {
+  "file": "antithesis/test/v1/accord/parallel_driver_rt_marker.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "sometimes"
+ },
+ "after faults stopped every acknowledged durable write is present with its value": {
+  "file": "antithesis/test/v1/accord/eventually_durable_check.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "always"
+ },
+ "after faults stopped every logged-batch group holds the same token in every slot": {
+  "file": "antithesis/test/v1/accord/eventually_pair_check.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "always"
+ },
+ "after faults stopped every transactional group holds the same token in every slot": {
+  "file": "antithesis/test/v1/accord/eventually_pair_check.py",
+  "guarantee": "G2",
+  "property": "txn-all-or-nothing",
+  "type": "always"
+ },
+ "an acknowledged durable write is visible with its value to the next read": {
+  "file": "antithesis/test/v1/accord/parallel_driver_durable_readback.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "always"
+ },
+ "an acknowledged durable write sampled during the run is present with its value": {
+  "file": "antithesis/test/v1/accord/anytime_durable_sample.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "always"
+ },
+ "an acknowledged durable write was read back through a different coordinator": {
+  "file": "antithesis/test/v1/accord/parallel_driver_durable_readback.py",
+  "guarantee": "G3",
+  "property": "acked-txn-durable",
+  "type": "sometimes"
+ },
+ "an application-retried transfer reads both accounts with balances within the bank total": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_autoretry.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "an application-retried transfer reads every transfer this client saw complete before it": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_autoretry.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "an audit completed while an earlier transfer's outcome was still unknown": {
+  "file": "antithesis/test/v1/accord/parallel_driver_bank_transfers.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "sometimes"
+ },
+ "an audit reflects every transfer acknowledged or observed before it started": {
+  "file": "antithesis/test/v1/accord/helper_accord.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "an audit saw a bank account drained to exactly zero": {
+  "file": "antithesis/test/v1/accord/helper_accord.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "sometimes"
+ },
+ "audited bank balances sum to the initial total": {
+  "file": "antithesis/test/v1/accord/helper_accord.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "audited transfer counters sum to an even number": {
+  "file": "antithesis/test/v1/accord/helper_accord.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "consecutive audits by one client observed newly committed transfers": {
+  "file": "antithesis/test/v1/accord/anytime_bank_audit.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "sometimes"
+ },
+ "every node coordinated a transaction within 120 seconds after faults stopped": {
+  "file": "antithesis/test/v1/accord/eventually_recovery_probe.py",
+  "guarantee": "G5",
+  "property": "recovers-after-faults",
+  "type": "always"
+ },
+ "every seeded bank account is visible to an audit transaction": {
+  "file": "antithesis/test/v1/accord/helper_accord.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "no bank account balance is negative in an audit": {
+  "file": "antithesis/test/v1/accord/helper_accord.py",
+  "guarantee": "G1",
+  "property": "txn-strict-serializable",
+  "type": "always"
+ },
+ "one client's successive plain reads of a single-writer register never go backwards": {
+  "file": "antithesis/test/v1/accord/parallel_driver_fm_readers.py",
+  "guarantee": "G4",
+  "property": "full-mode-linearizable",
+  "type": "always"
+ },
+ "the first transaction attempt once faults stopped succeeded": {
+  "file": "antithesis/test/v1/accord/eventually_recovery_probe.py",
+  "guarantee": "G5",
+  "property": "recovers-after-faults",
+  "type": "sometimes"
+ }
+}

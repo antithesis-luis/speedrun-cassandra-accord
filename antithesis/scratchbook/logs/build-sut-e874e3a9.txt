@@ -1,0 +1,88 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 3.53kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/eclipse-temurin:11-jdk
+#2 ...
+
+#3 [internal] load metadata for docker.io/library/eclipse-temurin:11-jre
+#3 DONE 0.2s
+
+#2 [internal] load metadata for docker.io/library/eclipse-temurin:11-jdk
+#2 DONE 0.2s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [build 1/9] FROM docker.io/library/eclipse-temurin:11-jdk@sha256:8db2bcf62ae171d1247c331db0410d8bc6347e7493bdafe104bb9a33d59c1291
+#5 resolve docker.io/library/eclipse-temurin:11-jdk@sha256:8db2bcf62ae171d1247c331db0410d8bc6347e7493bdafe104bb9a33d59c1291 0.0s done
+#5 DONE 0.1s
+
+#6 [stage-1 1/8] FROM docker.io/library/eclipse-temurin:11-jre@sha256:ad419849e59e2c7a325078dff5eb64db6f61c8872e316dfd501031ed72efc2dd
+#6 resolve docker.io/library/eclipse-temurin:11-jre@sha256:ad419849e59e2c7a325078dff5eb64db6f61c8872e316dfd501031ed72efc2dd 0.1s done
+#6 DONE 0.1s
+
+#7 [internal] load build context
+#7 transferring context: 2.94kB done
+#7 DONE 0.0s
+
+#8 [build 2/9] RUN apt-get update && apt-get install -y --no-install-recommends git curl ca-certificates  && rm -rf /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [build 3/9] RUN curl -fsSL https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.14-bin.tar.gz     | tar -xz -C /opt && ln -s /opt/apache-ant-1.10.14/bin/ant /usr/local/bin/ant
+#9 CACHED
+
+#10 [build 4/9] RUN test -n "e874e3a90b1942b945477e6d9ba03880b4f4a19d"  && git clone --filter=blob:none "https://github.com/apache/cassandra.git" /src  && git -C /src checkout --detach "e874e3a90b1942b945477e6d9ba03880b4f4a19d"  && git -C /src submodule update --init modules/accord  && echo "cassandra=$(git -C /src rev-parse HEAD) accord=$(git -C /src/modules/accord rev-parse HEAD)"
+#10 CACHED
+
+#11 [build 8/9] RUN ant -Dno-checkstyle=true -Drat.skip=true _artifacts-init  && ls -la build/dist/lib/apache-cassandra-*.jar build/dist/lib/cassandra-accord-*.jar            build/dist/lib/sdk-*.jar build/dist/lib/ffi-*.jar
+#11 CACHED
+
+#12 [build 9/9] RUN mkdir -p /out/cassandra/sut  && cp -a build/dist/bin build/dist/conf build/dist/lib /out/cassandra/  && rm -f /out/cassandra/lib/*-sources.jar /out/cassandra/lib/*-javadoc.jar  && mv /out/cassandra/lib/apache-cassandra-*.jar /out/cassandra/lib/cassandra-accord-*.jar /out/cassandra/sut/  && ls -la /out/cassandra/sut
+#12 CACHED
+
+#13 [stage-1 2/8] RUN apt-get update && apt-get install -y --no-install-recommends procps iproute2  && rm -rf /var/lib/apt/lists/*
+#13 CACHED
+
+#14 [build 5/9] COPY patches/ /patches/
+#14 CACHED
+
+#15 [build 7/9] WORKDIR /src
+#15 CACHED
+
+#16 [build 6/9] RUN set -e; if ls /patches/common/*.patch >/dev/null 2>&1; then       for p in /patches/common/*.patch; do echo "applying $p"; git -C /src apply --whitespace=nowarn "$p"; done;     fi
+#16 CACHED
+
+#17 [stage-1 3/8] COPY --from=build /out/cassandra/ /opt/cassandra/
+#17 CACHED
+
+#18 [stage-1 4/8] COPY sut/cassandra-overrides.yaml /opt/cassandra-antithesis/cassandra-overrides.yaml
+#18 DONE 0.1s
+
+#19 [stage-1 5/8] COPY sut/logback.xml /opt/cassandra/conf/logback.xml
+#19 DONE 0.1s
+
+#20 [stage-1 6/8] COPY sut/entrypoint.sh sut/helper-cms-bootstrap.sh /opt/cassandra-antithesis/
+#20 DONE 0.1s
+
+#21 [stage-1 7/8] COPY sut/nodetool /opt/cassandra-antithesis/bin/nodetool
+#21 DONE 0.1s
+
+#22 [stage-1 8/8] RUN cat /opt/cassandra/conf/cassandra.yaml /opt/cassandra-antithesis/cassandra-overrides.yaml       > /opt/cassandra-antithesis/cassandra.yaml.template  && chmod +x /opt/cassandra-antithesis/*.sh /opt/cassandra-antithesis/bin/nodetool /opt/cassandra/bin/*  && mkdir -p /var/lib/cassandra /var/log/cassandra /opt/antithesis/catalog  && ln -s /var/lib/cassandra /opt/cassandra/data  && ln -s /opt/cassandra/sut /opt/antithesis/catalog/cassandra
+#22 DONE 0.4s
+
+#23 exporting to image
+#23 exporting layers
+#23 exporting layers 0.4s done
+#23 exporting manifest sha256:7d3a0f1d2e4bab8d819e98770a2ab08f45aa455513c46c7d028175d3a78eee2b 0.0s done
+#23 exporting config sha256:d0481f10c9a2c1396e37968b341de34c4435806801f67596833a31dce89ae823 0.0s done
+#23 exporting attestation manifest sha256:01f5a27bdb2aa4805ecc3db5ea13a14966679b8b692082f7f2013f8c7ca06b37 0.1s done
+#23 exporting manifest list sha256:918b41b5c95d19ee6a83b5203ea32aea51877d38a1fcc9550f18494a17ac63be
+#23 exporting manifest list sha256:918b41b5c95d19ee6a83b5203ea32aea51877d38a1fcc9550f18494a17ac63be 0.0s done
+#23 naming to docker.io/library/cassandra-accord-cassandra:e874e3a9 done
+#23 unpacking to docker.io/library/cassandra-accord-cassandra:e874e3a9
+#23 unpacking to docker.io/library/cassandra-accord-cassandra:e874e3a9 0.2s done
+#23 DONE 0.8s

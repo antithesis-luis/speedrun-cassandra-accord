@@ -1,0 +1,17 @@
+# Fix check for the finding acked-transfer-overwritten on current. Changes ONLY PATCH_SET and SUT image tags (the tag keeps the name it was built and pushed under).
+services:
+  node1:
+    image: cassandra-accord-cassandra:e874e3a9-fix-V1
+    build:
+      args:
+        PATCH_SET: fixverify-acked-transfer-overwritten
+  node2:
+    image: cassandra-accord-cassandra:e874e3a9-fix-V1
+    build:
+      args:
+        PATCH_SET: fixverify-acked-transfer-overwritten
+  node3:
+    image: cassandra-accord-cassandra:e874e3a9-fix-V1
+    build:
+      args:
+        PATCH_SET: fixverify-acked-transfer-overwritten

@@ -1,0 +1,18 @@
+# boost: pre-fix override (CASSANDRA-21440). Change ONLY SUT_REF / PATCH_SET / TOOLCHAIN_IMAGE and SUT image tags.
+# Render: docker compose -f docker-compose.yaml -f compose.prefix.override.yaml config > ../config-prefix/docker-compose.yaml
+services:
+  node1:
+    image: cassandra-accord-cassandra:c9ffe116
+    build:
+      args:
+        SUT_REF: c9ffe116457384200851939e3687f81c00015e02
+  node2:
+    image: cassandra-accord-cassandra:c9ffe116
+    build:
+      args:
+        SUT_REF: c9ffe116457384200851939e3687f81c00015e02
+  node3:
+    image: cassandra-accord-cassandra:c9ffe116
+    build:
+      args:
+        SUT_REF: c9ffe116457384200851939e3687f81c00015e02

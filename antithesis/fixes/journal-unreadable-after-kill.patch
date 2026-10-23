@@ -1,0 +1,120 @@
+diff --git a/src/java/org/apache/cassandra/journal/Metadata.java b/src/java/org/apache/cassandra/journal/Metadata.java
+index 30db3bb..a9021bc 100644
+--- a/src/java/org/apache/cassandra/journal/Metadata.java
++++ b/src/java/org/apache/cassandra/journal/Metadata.java
+@@ -134,10 +134,20 @@ final class Metadata
+     }
+ 
+     static <K> Metadata rebuild(Descriptor descriptor, KeySupport<K> keySupport, RecoverableCrcFailurePolicy crcFailurePolicy)
++    {
++        return rebuild(descriptor, keySupport, crcFailurePolicy, false);
++    }
++
++    /**
++     * @param activeAtCrash the segment has no persisted metadata, i.e. it was still active when the process died;
++     *                      an unfinished (CRC never written) entry is then treated as the end of the segment and the
++     *                      rebuilt fsyncLimit excludes it, so later readers (index rebuild, replay) never see it.
++     */
++    static <K> Metadata rebuild(Descriptor descriptor, KeySupport<K> keySupport, RecoverableCrcFailurePolicy crcFailurePolicy, boolean activeAtCrash)
+     {
+         int recordsCount = 0;
+         int fsyncLimit = 0;
+-        try (StaticSegment.SequentialReader<K> reader = StaticSegment.sequentialReader(descriptor, keySupport, Integer.MAX_VALUE, crcFailurePolicy))
++        try (StaticSegment.SequentialReader<K> reader = StaticSegment.sequentialReader(descriptor, keySupport, Integer.MAX_VALUE, crcFailurePolicy, activeAtCrash))
+         {
+             while (reader.advance())
+                 ++recordsCount;
+@@ -155,7 +165,12 @@ final class Metadata
+ 
+     static <K> Metadata rebuildAndPersist(Descriptor descriptor, KeySupport<K> keySupport, RecoverableCrcFailurePolicy crcFailurePolicy)
+     {
+-        Metadata metadata = rebuild(descriptor, keySupport, crcFailurePolicy);
++        return rebuildAndPersist(descriptor, keySupport, crcFailurePolicy, false);
++    }
++
++    static <K> Metadata rebuildAndPersist(Descriptor descriptor, KeySupport<K> keySupport, RecoverableCrcFailurePolicy crcFailurePolicy, boolean activeAtCrash)
++    {
++        Metadata metadata = rebuild(descriptor, keySupport, crcFailurePolicy, activeAtCrash);
+         metadata.persist(descriptor);
+         return metadata;
+     }
+diff --git a/src/java/org/apache/cassandra/journal/StaticSegment.java b/src/java/org/apache/cassandra/journal/StaticSegment.java
+index 14a87d1..7294627 100644
+--- a/src/java/org/apache/cassandra/journal/StaticSegment.java
++++ b/src/java/org/apache/cassandra/journal/StaticSegment.java
+@@ -104,7 +104,11 @@ public final class StaticSegment<K, V> extends Segment<K, V>
+             throw new IllegalArgumentException("Data file for segment " + descriptor + " doesn't exist");
+ 
+         Metadata metadata = null;
+-        if (Component.METADATA.existsFor(descriptor))
++        // A segment without a persisted METADATA component was never closed (components are only persisted after the
++        // final fsync in ActiveSegment#close / CloseActiveSegmentRunnable), i.e. it was active when the process died.
++        // Its tail may contain allocations that were reserved but never written, which can safely be treated as EOF.
++        boolean activeAtCrash = !Component.METADATA.existsFor(descriptor);
++        if (!activeAtCrash)
+         {
+             try
+             {
+@@ -118,7 +122,7 @@ public final class StaticSegment<K, V> extends Segment<K, V>
+         }
+ 
+         if (metadata == null)
+-            metadata = Metadata.rebuildAndPersist(descriptor, keySupport, crcFailurePolicy);
++            metadata = Metadata.rebuildAndPersist(descriptor, keySupport, crcFailurePolicy, activeAtCrash);
+ 
+         OnDiskIndex<K> index = null;
+ 
+@@ -394,7 +398,17 @@ public final class StaticSegment<K, V> extends Segment<K, V>
+ 
+     static <K> SequentialReader<K> sequentialReader(Descriptor descriptor, KeySupport<K> keySupport, int fsyncedLimit, RecoverableCrcFailurePolicy crcFailurePolicy)
+     {
+-        return new SequentialReader<>(descriptor, keySupport, fsyncedLimit, crcFailurePolicy);
++        return sequentialReader(descriptor, keySupport, fsyncedLimit, crcFailurePolicy, false);
++    }
++
++    /**
++     * @param truncateAtUnfinishedEntry if true, the first entry whose size marker is valid but whose header or record
++     *                                  CRC was never written (reads as 0) is treated as the end of the segment. Only
++     *                                  valid for a segment that was active when the process died (see {@link #open}).
++     */
++    static <K> SequentialReader<K> sequentialReader(Descriptor descriptor, KeySupport<K> keySupport, int fsyncedLimit, RecoverableCrcFailurePolicy crcFailurePolicy, boolean truncateAtUnfinishedEntry)
++    {
++        return new SequentialReader<>(descriptor, keySupport, fsyncedLimit, crcFailurePolicy, truncateAtUnfinishedEntry);
+     }
+ 
+     /**
+@@ -409,12 +423,14 @@ public final class StaticSegment<K, V> extends Segment<K, V>
+     {
+         private final int fsyncedLimit; // exclusive
+         private final RecoverableCrcFailurePolicy crcFailurePolicy;
++        private final boolean truncateAtUnfinishedEntry;
+ 
+-        SequentialReader(Descriptor descriptor, KeySupport<K> keySupport, int fsyncedLimit, RecoverableCrcFailurePolicy crcFailurePolicy)
++        SequentialReader(Descriptor descriptor, KeySupport<K> keySupport, int fsyncedLimit, RecoverableCrcFailurePolicy crcFailurePolicy, boolean truncateAtUnfinishedEntry)
+         {
+             super(descriptor, keySupport);
+             this.fsyncedLimit = fsyncedLimit;
+             this.crcFailurePolicy = crcFailurePolicy;
++            this.truncateAtUnfinishedEntry = truncateAtUnfinishedEntry;
+             if (fsyncedLimit < buffer.limit())
+                 buffer.limit(fsyncedLimit);
+         }
+@@ -449,6 +465,18 @@ public final class StaticSegment<K, V> extends Segment<K, V>
+                     if (e.knownLength <= Integer.BYTES || sizeMarker != offset + e.knownLength)
+                         throw new JournalReadError(descriptor, file, e.getCause());
+ 
++                    // ActiveSegment#allocateBytes writes the size marker before the entry is serialized, and
++                    // EntrySerializer#write puts the (never-zero, see nonZeroCrc) CRCs last. A CRC that reads as 0
++                    // therefore means the entry was allocated but never finished. Since the flusher only advances
++                    // writtenTo/fsyncedTo past an allocation once its write has completed, nothing from this entry
++                    // onwards was ever fsynced or reported durable: treat it as the end of the segment.
++                    if (truncateAtUnfinishedEntry && e.readCrc == 0)
++                    {
++                        logger.warn("Unfinished journal entry at offset {} in {}, segment was active at crash; " +
++                                    "treating it as end of segment", offset, file, e);
++                        return eof();
++                    }
++
+                     switch (crcFailurePolicy)
+                     {
+                         case IGNORE: break;

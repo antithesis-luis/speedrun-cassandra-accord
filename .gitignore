@@ -1,0 +1,52 @@
+# Cloned sources (re-clonable: apache/cassandra, apache/cassandra-accord)
+/src/
+
+# Python and editor leftovers
+__pycache__/
+*.pyc
+*.tmp
+
+# Files under antithesis/ larger than 1 MB (downloaded run logs and validation output).
+# They stay on the machine that ran the tests; the documents cite them by path, unlinked.
+/antithesis/scratchbook/logs/ev/h4-final.ndjson
+/antithesis/scratchbook/logs/ev/h4-readback.ndjson
+/antithesis/scratchbook/logs/fv1-6718656826655334244.log
+/antithesis/scratchbook/logs/fv2-1866202673575119510.log
+/antithesis/scratchbook/logs/fv2-1866202673575119510.ndjson
+/antithesis/scratchbook/logs/fv2-7848957582273250159.log
+/antithesis/scratchbook/logs/fv2-m7563627453930811647.log
+/antithesis/scratchbook/logs/fv2b--4914426880962309495.log
+/antithesis/scratchbook/logs/fv2b--4914426880962309495.ndjson
+/antithesis/scratchbook/logs/fv2b-8989907090890779326.log
+/antithesis/scratchbook/logs/fv3--4549965503131056392.log
+/antithesis/scratchbook/logs/fv3-exit3--4857019936188895155.log
+/antithesis/scratchbook/logs/hunt1--4017183637122572070.log
+/antithesis/scratchbook/logs/hunt1--5994779628571608688.log
+/antithesis/scratchbook/logs/hunt1--6514846605191129539.log
+/antithesis/scratchbook/logs/hunt1--684858565517636670.log
+/antithesis/scratchbook/logs/hunt1--8100350718065269108.log
+/antithesis/scratchbook/logs/hunt2--4681640254575183705.log
+/antithesis/scratchbook/logs/hunt2--7253961278733688370.log
+/antithesis/scratchbook/logs/hunt2-351202264714247094.log
+/antithesis/scratchbook/logs/hunt3--3323740369927200736.log
+/antithesis/scratchbook/logs/hunt3--8545236388639200513.log
+/antithesis/scratchbook/logs/hunt3--8846845851714316707.log
+/antithesis/scratchbook/logs/hunt3-2526996890917044422.log
+/antithesis/scratchbook/logs/hunt3-7210116645916882353.log
+/antithesis/scratchbook/logs/hunt4-4577676815520121205.log
+/antithesis/scratchbook/logs/hunt4-8156848711228608486.log
+/antithesis/scratchbook/logs/hunt5--14343964086619208.log
+/antithesis/scratchbook/logs/hunt5--14343964086619208.ndjson
+/antithesis/scratchbook/logs/iter1-2977298595378160927.log
+/antithesis/scratchbook/logs/iter1-3115707109627864019.log
+/antithesis/scratchbook/logs/iter1-4829813570422657959.ndjson
+/antithesis/scratchbook/logs/iter1-m5709051635830128038.ndjson
+/antithesis/scratchbook/logs/iter1-m8841521013045425404.ndjson
+/antithesis/scratchbook/logs/iter2--3359217870427620869.log
+/antithesis/scratchbook/logs/iter3-2137002785411178762.log
+/antithesis/scratchbook/logs/iter3-2137002785411178762.ndjson
+/antithesis/scratchbook/logs/iter3-6400642402339339425.log
+/antithesis/scratchbook/logs/iter3-m3183840148574514038.log
+/antithesis/scratchbook/logs/iter3-m9161517995650739017.log
+/antithesis/scratchbook/logs/validate-fix1.txt
+/antithesis/scratchbook/logs/validate-p6-G4.txt

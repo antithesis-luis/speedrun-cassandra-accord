@@ -1,0 +1,44 @@
+# local smoke: docker compose -f antithesis/config/docker-compose.yaml up (Thu Oct  8 14:49:17 UTC 2026); SUT image cassandra-accord-cassandra:e874e3a9, workload cassandra-accord-workload:3220b5f4f8ba
+ Container cassandra-accord-node1  Started
+ Container cassandra-accord-node1  Healthy
+ Container cassandra-accord-node2  Started
+ Container cassandra-accord-node2  Healthy
+ Container cassandra-accord-node3  Started
+ Container cassandra-accord-node1  Healthy
+ Container cassandra-accord-node2  Healthy
+ Container cassandra-accord-node3  Healthy
+ Container cassandra-accord-client  Started
+## nodetool status (node1)
+--  Address     Load        Owns (effective)  Host ID                               Token                 Rack 
+UN  172.18.0.3  254.45 KiB  100.0%            6d194555-f6eb-41d0-c000-000000000002  -5014999373400869585  rack1
+UN  172.18.0.2  147.67 KiB  100.0%            6d194555-f6eb-41d0-c000-000000000001  2223461149098357912   rack1
+UN  172.18.0.4  158.35 KiB  100.0%            6d194555-f6eb-41d0-c000-000000000003  9033865577227106387   rack1
+## nodetool cms describe (node1)
+Members: cassandra-accord-node1/172.18.0.2:7000,/172.18.0.3:7000,/172.18.0.4:7000
+Needs reconfiguration: false
+Replication factor: ReplicationParams{class=org.apache.cassandra.locator.MetaStrategy, datacenter1=3}
+## node1 (entrypoint + CMS helper)
+boost: host=cassandra-accord-node1 sut_ref=e874e3a90b1942b945477e6d9ba03880b4f4a19d logdir=/var/log/cassandra/cassandra-accord-node1 heap=1536M
+INFO  [main] 2026-10-08T14:46:31,788 CassandraDaemon.java:856 - Startup complete
+boost-cms-helper: all 3 nodes UN
+boost-cms-helper: running nodetool cms reconfigure 3
+boost-cms-helper: CMS has 3 members; wrote /bootstrap/cms-ready
+## client
+client-setup: nodes=['cassandra-accord-node1', 'cassandra-accord-node2', 'cassandra-accord-node3']
+client-setup: all nodes up: attempt 1 failed: NoHostAvailable: ('Unable to complete the operation against any hosts', {<Host: 172.18.0.2:9042 datacenter1>: ConnectionException('Host has been marked down or removed')})
+client-setup: all 3 nodes up and peered
+client-setup: CMS reconfigured to 3 members
+client-setup: schema created
+client-setup: probe transaction committed with coordinator 172.18.0.2
+client-setup: probe transaction committed with coordinator 172.18.0.3
+client-setup: probe transaction committed with coordinator 172.18.0.4
+client-setup: setup_complete emitted
+## kill -9 node2 + restart (stop_marker_failure_policy=ALLOW_UNSAFE_STARTUP): healthy after 35s, rejoined UN with its data volume; txn via each coordinator OK afterwards
+INFO  [main] 2026-10-08T14:47:11,056 CassandraDaemon.java:856 - Startup complete
+WARN  [main] 2026-10-08T14:48:37,932 AccordService.java:549 - Stop marker is older than start marker (-1<1791470811531), so cannot assume we have a complete log
+INFO  [main] 2026-10-08T14:48:58,045 CassandraDaemon.java:856 - Startup complete
+## log files (node1)
+debug.jsonl
+gc.log
+profiler
+system.jsonl

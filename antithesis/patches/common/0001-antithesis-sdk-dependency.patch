@@ -1,0 +1,51 @@
+diff --git a/.build/cassandra-deps-maven-pom.xml b/.build/cassandra-deps-maven-pom.xml
+index 4df4cf4e5d..da7149dc93 100644
+--- a/.build/cassandra-deps-maven-pom.xml
++++ b/.build/cassandra-deps-maven-pom.xml
+@@ -40,6 +40,14 @@
+     <url>https://gitbox.apache.org/repos/asf?p=cassandra.git</url>
+   </scm>
+   <dependencies>
++    <dependency>
++      <groupId>com.antithesis</groupId>
++      <artifactId>sdk</artifactId>
++    </dependency>
++    <dependency>
++      <groupId>com.antithesis</groupId>
++      <artifactId>ffi</artifactId>
++    </dependency>
+     <dependency>
+       <groupId>org.xerial.snappy</groupId>
+       <artifactId>snappy-java</artifactId>
+diff --git a/.build/parent-maven-pom.xml b/.build/parent-maven-pom.xml
+index 34d9e1d4ff..5c6c4dfd18 100644
+--- a/.build/parent-maven-pom.xml
++++ b/.build/parent-maven-pom.xml
+@@ -290,6 +290,27 @@
+     artifactId.
+     -->
+     <dependencies>
++      <!-- Antithesis SDK (boost harness) -->
++      <dependency>
++        <groupId>com.antithesis</groupId>
++        <artifactId>sdk</artifactId>
++        <version>1.7.0</version>
++        <exclusions>
++          <exclusion>
++            <groupId>com.fasterxml.jackson.core</groupId>
++            <artifactId>jackson-databind</artifactId>
++          </exclusion>
++          <exclusion>
++            <groupId>com.antithesis</groupId>
++            <artifactId>ffi</artifactId>
++          </exclusion>
++        </exclusions>
++      </dependency>
++      <dependency>
++        <groupId>com.antithesis</groupId>
++        <artifactId>ffi</artifactId>
++        <version>1.7.0</version>
++      </dependency>
+       <dependency>
+         <groupId>org.xerial.snappy</groupId>
+         <artifactId>snappy-java</artifactId>

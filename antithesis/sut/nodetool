@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Launcher for Cassandra's nodetool: adds the SUT jars (and any jars Antithesis injects beside
+# them in /opt/cassandra/sut) to the classpath, then runs the stock bin/nodetool unchanged.
+EXTRA_CLASSPATH="$(ls -1 /opt/cassandra/sut/*.jar | paste -sd: -)"
+export EXTRA_CLASSPATH
+unset MAX_HEAP_SIZE   # the server heap setting must not size the nodetool JVM (defaults to 128m)
+exec /opt/cassandra/bin/nodetool "$@"

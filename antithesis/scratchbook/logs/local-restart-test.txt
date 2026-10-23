@@ -1,0 +1,57 @@
+# local restart test 2026-10-08T18:30:46Z (static IPs + restart seed list + connect() fix)
+## setup
+client-setup: bank accounts seeded
+client-setup: setup_complete emitted
+node1 first boot: boost: host=cassandra-accord-node1 sut_ref=e874e3a90b1942b945477e6d9ba03880b4f4a19d logdir=/var/log/cassandra/cassandra-accord-node1 heap=1536M boot=first-boot seeds=cassandra-accord-node1
+node1 ip: 10.231.17.11
+node2 first boot: boost: host=cassandra-accord-node2 sut_ref=e874e3a90b1942b945477e6d9ba03880b4f4a19d logdir=/var/log/cassandra/cassandra-accord-node2 heap=1536M boot=first-boot seeds=cassandra-accord-node1
+node2 ip: 10.231.17.12
+node3 first boot: boost: host=cassandra-accord-node3 sut_ref=e874e3a90b1942b945477e6d9ba03880b4f4a19d logdir=/var/log/cassandra/cassandra-accord-node3 heap=1536M boot=first-boot seeds=cassandra-accord-node1
+node3 ip: 10.231.17.13
+## docker kill node1, node2
+cassandra-accord-node1
+cassandra-accord-node2
+## docker start node2 (node1 down)
+cassandra-accord-node2
+after 0s: node2 state=running exit=0 ip=10.231.17.12
+boost: host=cassandra-accord-node2 sut_ref=e874e3a90b1942b945477e6d9ba03880b4f4a19d logdir=/var/log/cassandra/cassandra-accord-node2 heap=1536M boot=first-boot seeds=cassandra-accord-node1
+INFO  [main] 2026-10-08T18:29:21,249 CassandraDaemon.java:856 - Startup complete
+boost: host=cassandra-accord-node2 sut_ref=e874e3a90b1942b945477e6d9ba03880b4f4a19d logdir=/var/log/cassandra/cassandra-accord-node2 heap=1536M boot=restart seeds=cassandra-accord-node1,cassandra-accord-node2,cassandra-accord-node3
+WARN  [main] 2026-10-08T18:30:50,390 SimpleSeedProvider.java:106 - Seed provider couldn't lookup host cassandra-accord-node1
+after +9s more: node2 state=running exit=0 ip=10.231.17.12
+INFO  [main] 2026-10-08T18:29:21,249 CassandraDaemon.java:856 - Startup complete
+INFO  [main] 2026-10-08T18:31:05,041 AccordService.java:763 - Finished catchup with all quorums. 0.04s elapsed.
+INFO  [main] 2026-10-08T18:31:05,157 CassandraDaemon.java:856 - Startup complete
+## docker start node1
+cassandra-accord-node1
+node1 after 90s: running exit=0 ip=10.231.17.11
+INFO  [main] 2026-10-08T18:28:58,948 CassandraDaemon.java:856 - Startup complete
+boost: host=cassandra-accord-node1 sut_ref=e874e3a90b1942b945477e6d9ba03880b4f4a19d logdir=/var/log/cassandra/cassandra-accord-node1 heap=1536M boot=restart seeds=cassandra-accord-node1,cassandra-accord-node2,cassandra-accord-node3
+INFO  [main] 2026-10-08T18:32:41,642 CassandraDaemon.java:856 - Startup complete
+## nodetool status (node3)
+Status=Up/Down
+UN  10.231.17.11  1.14 MiB    100.0%            6d194555-f6eb-41d0-c000-000000000001  -8581649404168778485  rack1
+UN  10.231.17.13  926.57 KiB  100.0%            6d194555-f6eb-41d0-c000-000000000003  -1771244976040030009  rack1
+UN  10.231.17.12  1.11 MiB    100.0%            6d194555-f6eb-41d0-c000-000000000002  2626634147041545633   rack1
+## BEGIN TRANSACTION probe per coordinator
+probe txn ok via 10.231.17.11 cassandra-accord-node1
+probe txn ok via 10.231.17.12 cassandra-accord-node2
+probe txn ok via 10.231.17.13 cassandra-accord-node3
+## parallel_driver_bank_transfers.py
+bank_transfers: ops=40 audit_pct=50 hot=False
+bank_transfers: done {'acked': 17, 'declined': 3, 'ambiguous': 0, 'audits': 20, 'audit_errors': 0}
+exit=0
+## anytime_bank_audit.py
+bank_audit: done audits=10
+exit=0
+## eventually_recovery_probe.py
+recovery_probe: done in 0.2s rounds=1 connected_s=0.1 txn_first_success={'cassandra-accord-node1': 0.1, 'cassandra-accord-node2': 0.1, 'cassandra-accord-node3': 0.1} plain_first_success=0.2
+exit=0
+## connect() with unresolvable contact points (CASSANDRA_NODES=nope-a,nope-b), budget 5s
+conntest: connect attempt 1 failed: UnresolvableContactPoints: {}
+conntest: connect attempt 2 failed: UnresolvableContactPoints: {}
+conntest: connect attempt 3 failed: UnresolvableContactPoints: {}
+conntest: cluster unreachable after 3 connect attempts; giving up
+returned (None, None)
+exit=0
+## down -v done

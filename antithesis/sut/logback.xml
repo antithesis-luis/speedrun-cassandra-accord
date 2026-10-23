@@ -1,0 +1,82 @@
+<!--
+ Antithesis harness logback config for Cassandra (replaces conf/logback.xml).
+ Same appenders and levels as the stock config, except the two file appenders write
+ one JSON object per line (*.jsonl) so Antithesis parses them as structured events.
+ ${cassandra.logdir} is set by the entrypoint to $ANTITHESIS_OUTPUT_DIR/<hostname>
+ (fallback /var/log/cassandra/<hostname> for local runs). STDOUT is unchanged text at INFO.
+-->
+<configuration scan="false">
+  <!-- No shutdown hook; Cassandra runs it itself in StorageService after shutdown -->
+
+  <appender name="SYSTEMLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+    <file>${cassandra.logdir}/system.jsonl</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${cassandra.logdir}/system.%d{yyyy-MM-dd}.%i.jsonl</fileNamePattern>
+      <maxFileSize>50MB</maxFileSize>
+      <maxHistory>7</maxHistory>
+      <totalSizeCap>5GB</totalSizeCap>
+    </rollingPolicy>
+    <encoder class="ch.qos.logback.classic.encoder.JsonEncoder">
+      <withSequenceNumber>false</withSequenceNumber>
+      <withNanoseconds>false</withNanoseconds>
+      <withContext>false</withContext>
+      <withMDC>false</withMDC>
+      <withKVPList>false</withKVPList>
+      <withArguments>false</withArguments>
+      <withMessage>false</withMessage>
+      <withFormattedMessage>true</withFormattedMessage>
+    </encoder>
+  </appender>
+
+  <appender name="DEBUGLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${cassandra.logdir}/debug.jsonl</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${cassandra.logdir}/debug.%d{yyyy-MM-dd}.%i.jsonl</fileNamePattern>
+      <maxFileSize>50MB</maxFileSize>
+      <maxHistory>7</maxHistory>
+      <totalSizeCap>5GB</totalSizeCap>
+    </rollingPolicy>
+    <encoder class="ch.qos.logback.classic.encoder.JsonEncoder">
+      <withSequenceNumber>false</withSequenceNumber>
+      <withNanoseconds>false</withNanoseconds>
+      <withContext>false</withContext>
+      <withMDC>false</withMDC>
+      <withKVPList>false</withKVPList>
+      <withArguments>false</withArguments>
+      <withMessage>false</withMessage>
+      <withFormattedMessage>true</withFormattedMessage>
+    </encoder>
+  </appender>
+
+  <appender name="ASYNCDEBUGLOG" class="ch.qos.logback.classic.AsyncAppender">
+    <queueSize>1024</queueSize>
+    <discardingThreshold>0</discardingThreshold>
+    <includeCallerData>true</includeCallerData>
+    <appender-ref ref="DEBUGLOG" />
+  </appender>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+    <encoder>
+      <pattern>%-5level [%thread] %date{"yyyy-MM-dd'T'HH:mm:ss,SSS", UTC} %F:%L - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="slow_queries" additivity="false" level="DEBUG">
+    <appender-ref ref="DEBUGLOG"/>
+  </logger>
+
+  <root level="INFO">
+    <appender-ref ref="SYSTEMLOG" />
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="ASYNCDEBUGLOG" />
+  </root>
+
+  <!-- boost: was DEBUG (stock); INFO to keep Antithesis output volume reasonable (iterate-1: 7.9 GB / 30 m failed "Customer output volume") -->
+  <logger name="org.apache.cassandra" level="INFO"/>
+</configuration>

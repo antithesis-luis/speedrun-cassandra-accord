@@ -1,0 +1,17 @@
+# boost hunt variant: config-only change (CONFIG_VARIANT=rebootstrap, sut/variants/rebootstrap.sed); same source, patches and workload.
+services:
+  node1:
+    image: cassandra-accord-cassandra:e874e3a9-cfg-rebootstrap
+    build:
+      args:
+        CONFIG_VARIANT: rebootstrap
+  node2:
+    image: cassandra-accord-cassandra:e874e3a9-cfg-rebootstrap
+    build:
+      args:
+        CONFIG_VARIANT: rebootstrap
+  node3:
+    image: cassandra-accord-cassandra:e874e3a9-cfg-rebootstrap
+    build:
+      args:
+        CONFIG_VARIANT: rebootstrap

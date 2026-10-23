@@ -1,0 +1,25 @@
+Pushing image: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-workload:63f7cc96e480
+Image pushed: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-workload:63f7cc96e480@sha256:e9a5611c014ac3857ced58750a3f6f41c78e9cd46a8b105e71a0ae2de051f69b
+Pushing image: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-cassandra:e874e3a9
+Image pushed: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/cassandra-accord-cassandra:e874e3a9@sha256:6ab2501f53aaca0c84a6f459d214e8c115ed57cf233822b98d4e2a326c18e98d
+Building config image: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/snouty-config:20261008-192749-c64f
+Pushing config image: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/snouty-config:20261008-192749-c64f
+Config image pushed successfully: us-central1-docker.pkg.dev/molten-verve-216720/honey-pwhale-repository/snouty-config@sha256:baccfae947dcdb8eb89f089ffe8df0449d7523f328066abd6a7d2c4d4c9f2a23
+
+Requesting Antithesis test run with params:
+{
+  "antithesis.test_name": "boost/cassandra-accord/cassandra@e874e3a9",
+  "antithesis.description": "boost hunt #1: current, full fault set, 300m, turbo",
+  "antithesis.duration": "300",
+  "antithesis.source": "boost-cassandra-accord-current",
+  "antithesis.config_image": "snouty-config@sha256:baccfae947dcdb8eb89f089ffe8df0449d7523f328066abd6a7d2c4d4c9f2a23",
+  "custom.boost.name": "accord",
+  "antithesis.performance_tier": "turbo",
+  "custom.include_for_node_pause": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+  "custom.include_for_node_throttle": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+  "custom.include_for_node_termination": "cassandra-accord-node1 cassandra-accord-node2 cassandra-accord-node3",
+  "custom.clock_skip": "true"
+}
+{
+  "runId": "42229a5d3c2580dbfcf6cf6dd13c5cc5-63-12"
+}

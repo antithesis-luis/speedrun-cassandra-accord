@@ -1,0 +1,67 @@
+# node2 kill+restart with accord.journal.stop_marker_failure_policy=REBOOTSTRAP (local, Thu Oct  8 14:44:57 UTC 2026); still not started after ~12 min
+INFO  [main] 2026-10-08T14:32:39,796 AccordService.java:553 - Stop marker is older than start marker (-1<1791469868745). Rebootstrapping.
+INFO  [main] 2026-10-08T14:32:39,796 AccordService.java:559 - Starting background compaction of system_accord
+INFO  [main] 2026-10-08T14:32:39,955 ShardDurability.java:659 - Starting shard durability scheduler 1 for Shard[tid:16:-Inf,tid:16:+Inf]:(1f, 2f, 3f)
+INFO  [main] 2026-10-08T14:32:39,957 ShardDurability.java:659 - Starting shard durability scheduler 2 for Shard[tid:17:-Inf,tid:17:+Inf]:(1f, 2f, 3f)
+INFO  [main] 2026-10-08T14:32:39,958 ShardDurability.java:659 - Starting shard durability scheduler 3 for Shard[tid:18:-Inf,tid:18:+Inf]:(1f, 2f, 3f)
+INFO  [main] 2026-10-08T14:32:39,958 ShardDurability.java:659 - Starting shard durability scheduler 4 for Shard[tid:19:-Inf,tid:19:+Inf]:(1f, 2f, 3f)
+INFO  [main] 2026-10-08T14:32:39,958 ShardDurability.java:659 - Starting shard durability scheduler 5 for Shard[tid:1a:-Inf,tid:1a:+Inf]:(1f, 2f, 3f)
+INFO  [AccordExecutor[1,1]] 2026-10-08T14:32:39,993 DurabilityService.java:188 - Requesting durability [[[accord_ks.pair_a|tid:17|3,1,2] Epoch 27] requires >= [27,0,0(KR),0] for [tid:17:[(-1,+Inf]]] with local:KnownToSelf and remote:NoRemote]
+INFO  [AccordExecutor[0,0]] 2026-10-08T14:32:39,993 DurabilityService.java:188 - Requesting durability [[[accord_ks.accounts|tid:16|0,0,2] Epoch 27] requires >= [27,0,0(KR),0] for [tid:16:[(-Inf,-1]]] with local:KnownToSelf and remote:NoRemote]
+INFO  [AccordExecutor[1,3]] 2026-10-08T14:32:39,993 DurabilityService.java:188 - Requesting durability [[[accord_ks.ledger|tid:19|7,1,2] Epoch 27] requires >= [27,0,0(KR),0] for [tid:19:[(-1,+Inf]]] with local:KnownToSelf and remote:NoRemote]
+INFO  [AccordExecutor[1,4]] 2026-10-08T14:32:39,993 DurabilityService.java:188 - Requesting durability [[[accord_ks.kv|tid:1a|9,1,2] Epoch 27] requires >= [27,0,0(KR),0] for [tid:1a:[(-1,+Inf]]] with local:KnownToSelf and remote:NoRemote]
+INFO  [AccordExecutor[0,4]] 2026-10-08T14:32:39,993 DurabilityService.java:188 - Requesting durability [[[accord_ks.kv|tid:1a|8,0,2] Epoch 27] requires >= [27,0,0(KR),0] for [tid:1a:[(-Inf,-1]]] with local:KnownToSelf and remote:NoRemote]
+INFO  [AccordExecutor[0,3]] 2026-10-08T14:32:39,993 DurabilityService.java:188 - Requesting durability [[[accord_ks.ledger|tid:19|6,0,2] Epoch 27] requires >= [27,0,0(KR),0] for [tid:19:[(-Inf,-1]]] with local:KnownToSelf and remote:NoRemote]
+INFO  [AccordExecutor[0,1]] 2026-10-08T14:32:39,993 DurabilityService.java:188 - Requesting durability [[[accord_ks.pair_a|tid:17|2,0,2] Epoch 27] requires >= [27,0,0(KR),0] for [tid:17:[(-Inf,-1]]] with local:KnownToSelf and remote:NoRemote]
+INFO  [AccordExecutor[0,2]] 2026-10-08T14:32:39,993 DurabilityService.java:188 - Requesting durability [[[accord_ks.pair_b|tid:18|4,0,2] Epoch 27] requires >= [27,0,0(KR),0] for [tid:18:[(-Inf,-1]]] with local:KnownToSelf and remote:NoRemote]
+INFO  [AccordExecutor[1,2]] 2026-10-08T14:32:39,993 DurabilityService.java:188 - Requesting durability [[[accord_ks.pair_b|tid:18|5,1,2] Epoch 27] requires >= [27,0,0(KR),0] for [tid:18:[(-1,+Inf]]] with local:KnownToSelf and remote:NoRemote]
+INFO  [AccordExecutor[1,0]] 2026-10-08T14:32:39,993 DurabilityService.java:188 - Requesting durability [[[accord_ks.accounts|tid:16|1,1,2] Epoch 27] requires >= [27,0,0(KR),0] for [tid:16:[(-1,+Inf]]] with local:KnownToSelf and remote:NoRemote]
+INFO  [Messaging-EventLoop-3-5] 2026-10-08T14:32:40,093 OutboundConnection.java:1171 - cassandra-accord-node2/172.18.0.3:7000(/172.18.0.3:33118)->/172.18.0.2:7000-SMALL_MESSAGES-a701adca successfully connected, version = 14, framing = CRC, encryption = unencrypted
+INFO  [Messaging-EventLoop-3-8] 2026-10-08T14:32:40,094 OutboundConnection.java:1171 - cassandra-accord-node2/172.18.0.3:7000(/172.18.0.3:43080)->/172.18.0.4:7000-SMALL_MESSAGES-229d8382 successfully connected, version = 14, framing = CRC, encryption = unencrypted
+INFO  [AccordScheduled:1] 2026-10-08T14:32:40,104 AccordTask.java:792 - Cancelling GetMaxConflict{, scope:{homeKey:tid:18:+Inf,[tid:18:[(-1,+Inf]]]}}
+INFO  [AccordScheduled:1] 2026-10-08T14:32:40,105 AccordTask.java:792 - Cancelling GetMaxConflict{, scope:{homeKey:tid:18:-1,[tid:18:[(-Inf,-1]]]}}
+INFO  [AccordScheduled:1] 2026-10-08T14:32:40,105 AccordTask.java:792 - Cancelling GetMaxConflict{, scope:{homeKey:tid:16:+Inf,[tid:16:[(-1,+Inf]]]}}
+INFO  [AccordScheduled:1] 2026-10-08T14:32:40,106 AccordTask.java:792 - Cancelling GetMaxConflict{, scope:{homeKey:tid:19:-1,[tid:19:[(-Inf,-1]]]}}
+WARN  [AccordExecutor[0,12]] 2026-10-08T14:32:40,110 NoSpamLogger.java:110 - 
+java.util.concurrent.CancellationException: null
+	at org.apache.cassandra.service.accord.AccordTask.lambda$cancelExclusive$3(AccordTask.java:799)
+	at org.apache.cassandra.service.accord.AccordExecutor$PlainRunnable.runInternal(AccordExecutor.java:1714)
+	at org.apache.cassandra.service.accord.AccordExecutorAbstractLockLoop$2.run(AccordExecutorAbstractLockLoop.java:285)
+	at org.apache.cassandra.service.accord.AccordExecutorLoops.lambda$wrap$0(AccordExecutorLoops.java:80)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Unknown Source)
+	at org.apache.cassandra.concurrent.CassandraThread.run(CassandraThread.java:97)
+WARN  [AccordExecutor[0,13]] 2026-10-08T14:32:40,202 ShardDurability.java:408 - [27,1791469955162112,151(RX),2]: Failed to agree RX for [tid:16:[(-3,-2]]]: null.
+WARN  [AccordExecutor[0,8]] 2026-10-08T14:32:40,202 ShardDurability.java:408 - [27,1791469955161088,151(RX),2]: Failed to agree RX for [tid:17:[(-3,-2]]]: null.
+WARN  [AccordExecutor[0,9]] 2026-10-08T14:32:40,202 ShardDurability.java:408 - [27,1791469955164160,151(RX),2]: Failed to agree RX for [tid:1a:[(-3,-2]]]: null.
+INFO  [AccordExecutor[0,13]] 2026-10-08T14:32:40,203 ShardDurability.java:342 - Increased numberOfSplits to 16 for shard tid:16:(-Inf,+Inf]
+INFO  [AccordExecutor[0,8]] 2026-10-08T14:32:40,203 ShardDurability.java:342 - Increased numberOfSplits to 16 for shard tid:17:(-Inf,+Inf]
+INFO  [AccordExecutor[0,9]] 2026-10-08T14:32:40,203 ShardDurability.java:342 - Increased numberOfSplits to 16 for shard tid:1a:(-Inf,+Inf]
+WARN  [AccordExecutor[0,2]] 2026-10-08T14:32:40,203 ShardDurability.java:408 - [27,1791469955163136,151(RX),2]: Failed to agree RX for [tid:19:[(-3,-2]]]: null.
+WARN  [AccordExecutor[0,5]] 2026-10-08T14:32:40,203 ShardDurability.java:408 - [27,1791469955165184,151(RX),2]: Failed to agree RX for [tid:18:[(-3,-2]]]: null.
+INFO  [AccordExecutor[0,5]] 2026-10-08T14:32:40,205 ShardDurability.java:342 - Increased numberOfSplits to 16 for shard tid:18:(-Inf,+Inf]
+INFO  [AccordExecutor[0,2]] 2026-10-08T14:32:40,204 ShardDurability.java:342 - Increased numberOfSplits to 16 for shard tid:19:(-Inf,+Inf]
+INFO  [AccordExecutor[1,5]] 2026-10-08T14:32:40,221 DurabilityQueue.java:606 - [27,1791469955095552,151(RX),2]: Incomplete durability for [tid:19:[(-2305843009213693954,-3]]]null. [2] were unsuccessful.
+INFO  [AccordExecutor[0,6]] 2026-10-08T14:32:40,231 AccordFetchCoordinator.java:456 - StreamPlan 1d8c0d4a-c325-11f1-8a09-237ae9a73190 created for bootstrap of tid:19:(-1,+Inf] from 1 with no data to stream; succeeding immediately.
+INFO  [AccordExecutor[0,15]] 2026-10-08T14:32:40,233 AccordFetchCoordinator.java:456 - StreamPlan 1d8d6ce4-c325-11f1-8a09-237ae9a73190 created for bootstrap of tid:19:(-Inf,-1] from 1 with no data to stream; succeeding immediately.
+INFO  [AccordExecutor[0,12]] 2026-10-08T14:32:40,234 AccordFetchCoordinator.java:456 - StreamPlan 1d8c0d40-c325-11f1-8a09-237ae9a73190 created for bootstrap of tid:17:(-1,+Inf] from 1 with no data to stream; succeeding immediately.
+INFO  [AccordExecutor[0,10]] 2026-10-08T14:32:40,234 AccordFetchCoordinator.java:456 - StreamPlan 1d8d6cd0-c325-11f1-8a09-237ae9a73190 created for bootstrap of tid:18:(-1,+Inf] from 1 with no data to stream; succeeding immediately.
+INFO  [AccordExecutor[0,11]] 2026-10-08T14:32:40,294 AccordFetchCoordinator.java:456 - StreamPlan 1d8f1a80-c325-11f1-8a09-237ae9a73190 created for bootstrap of tid:18:(-Inf,-1] from 1 with no data to stream; succeeding immediately.
+INFO  [AccordExecutor[0,4]] 2026-10-08T14:32:40,294 AccordFetchCoordinator.java:456 - StreamPlan 1d8f8fb0-c325-11f1-8a09-237ae9a73190 created for bootstrap of tid:17:(-Inf,-1] from 1 with no data to stream; succeeding immediately.
+INFO  [AccordExecutor[0,8]] 2026-10-08T14:32:40,294 AccordFetchCoordinator.java:456 - StreamPlan 1d8d93ea-c325-11f1-8a09-237ae9a73190 created for bootstrap of tid:16:(-1,+Inf] from 1 with no data to stream; succeeding immediately.
+INFO  [AccordExecutor[1,10]] 2026-10-08T14:32:40,297 AccordFetchCoordinator.java:456 - StreamPlan 1d8de200-c325-11f1-8a09-237ae9a73190 created for bootstrap of tid:16:(-Inf,-1] from 1 with no data to stream; succeeding immediately.
+INFO  [AccordExecutor[1,11]] 2026-10-08T14:32:40,300 AccordFetchCoordinator.java:451 - StreamPlan 1d8d6cda-c325-11f1-8a09-237ae9a73190 created for bootstrap of tid:1a:(-1,+Inf] from 1
+INFO  [AccordExecutor[0,3]] 2026-10-08T14:32:40,302 AccordFetchCoordinator.java:451 - StreamPlan 1d8f1a8a-c325-11f1-8a09-237ae9a73190 created for bootstrap of tid:1a:(-Inf,-1] from 1
+INFO  [Messaging-EventLoop-3-11] 2026-10-08T14:32:40,303 InboundConnectionInitiator.java:462 - /172.18.0.2:7000(/172.18.0.2:51156)->cassandra-accord-node2/172.18.0.3:7000-STREAMING-2bf12cf3 streaming connection established, version = 14, framing = UNPROTECTED, encryption = unencrypted
+INFO  [Messaging-EventLoop-3-12] 2026-10-08T14:32:40,303 InboundConnectionInitiator.java:462 - /172.18.0.2:7000(/172.18.0.2:51172)->cassandra-accord-node2/172.18.0.3:7000-STREAMING-2d86023b streaming connection established, version = 14, framing = UNPROTECTED, encryption = unencrypted
+INFO  [Stream-Deserializer-/172.18.0.2:7000-2d86023b] 2026-10-08T14:32:40,317 StreamResultFuture.java:124 - [Stream #1d8f1a8a-c325-11f1-8a09-237ae9a73190 ID#0] Creating new streaming plan for Bootstrap from /172.18.0.2:7000 channel.remote /172.18.0.2:51172 channel.local /172.18.0.3:7000 channel.id 2d86023b
+INFO  [Stream-Deserializer-/172.18.0.2:7000-2d86023b] 2026-10-08T14:32:40,320 AccordFetchCoordinator.java:234 - StreamFuture for plan 1d8f1a8a-c325-11f1-8a09-237ae9a73190 received for bootstrap of tid:1a:(-Inf,-1] from 1
+INFO  [Stream-Deserializer-/172.18.0.2:7000-2d86023b] 2026-10-08T14:32:40,327 StreamResultFuture.java:132 - [Stream #1d8f1a8a-c325-11f1-8a09-237ae9a73190, ID#0] Received streaming plan for Bootstrap from /172.18.0.2:7000 channel.remote /172.18.0.2:51172 channel.local /172.18.0.3:7000 channel.id 2d86023b
+INFO  [Stream-Deserializer-/172.18.0.2:7000-2bf12cf3] 2026-10-08T14:32:40,328 StreamResultFuture.java:124 - [Stream #1d8d6cda-c325-11f1-8a09-237ae9a73190 ID#0] Creating new streaming plan for Bootstrap from /172.18.0.2:7000 channel.remote /172.18.0.2:51156 channel.local /172.18.0.3:7000 channel.id 2bf12cf3
+INFO  [Stream-Deserializer-/172.18.0.2:7000-2bf12cf3] 2026-10-08T14:32:40,328 AccordFetchCoordinator.java:234 - StreamFuture for plan 1d8d6cda-c325-11f1-8a09-237ae9a73190 received for bootstrap of tid:1a:(-1,+Inf] from 1
+...
+INFO  [AccordExecutor[0,6]] 2026-10-08T14:44:54,209 ShardDurability.java:309 - Durability for (quorum=[27,1791470678289408,1687(RX),1],universal=[27,1791469933263872,1687(RX),1]) at least tid:16:(-Inf,+Inf].
+INFO  [AccordExecutor[0,7]] 2026-10-08T14:44:54,215 ShardDurability.java:284 - Successfully completed one consensus cycle for shard tid:18:(-Inf,+Inf] in 34s (vs 20s target)
+INFO  [AccordExecutor[0,7]] 2026-10-08T14:44:54,215 ShardDurability.java:309 - Durability for tid:18:(-Inf,-8070450532247928833]=(quorum=[27,1791470678290432,1687(RX),1],universal=[27,1791469933265920,1687(RX),1]) at least tid:18:(-Inf,+Inf].
+INFO  [AccordExecutor[1,12]] 2026-10-08T14:44:54,216 ShardDurability.java:284 - Successfully completed one consensus cycle for shard tid:1a:(-Inf,+Inf] in 34s (vs 20s target)
+INFO  [AccordExecutor[1,12]] 2026-10-08T14:44:54,217 ShardDurability.java:309 - Durability for (quorum=[27,1791470683268096,1687(RX),1],universal=[27,1791469933817856,1687(RX),2]) at least tid:1a:(-Inf,+Inf].

@@ -1,0 +1,3 @@
+PASS 1 only SUT PATCH_SET/image differ (current vs fixverify-V1)
+PASS 2 all 3 SUT services overridden
+PASS 4 same workload tag 772c2f7e081f

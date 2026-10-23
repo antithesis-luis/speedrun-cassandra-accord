@@ -1,0 +1,214 @@
+name: cassandra-accord
+services:
+  client:
+    build:
+      context: /home/exedev/cassandra/cassandra-accord/antithesis/test
+      dockerfile: Dockerfile
+    container_name: cassandra-accord-client
+    depends_on:
+      node1:
+        condition: service_healthy
+        required: true
+      node2:
+        condition: service_healthy
+        required: true
+      node3:
+        condition: service_healthy
+        required: true
+    environment:
+      CASSANDRA_NODES: cassandra-accord-node1,cassandra-accord-node2,cassandra-accord-node3
+      NO_COLOR: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    hostname: cassandra-accord-client
+    image: cassandra-accord-workload:63f7cc96e480
+    init: true
+    networks:
+      accord:
+        ipv4_address: 10.231.17.20
+    platform: linux/amd64
+    volumes:
+      - type: volume
+        source: ledger
+        target: /ledger
+        volume: {}
+      - type: volume
+        source: bootstrap
+        target: /bootstrap
+        volume: {}
+  node1:
+    build:
+      context: /home/exedev/cassandra/cassandra-accord/antithesis
+      dockerfile: Dockerfile
+      args:
+        CONFIG_VARIANT: durable
+        PATCH_SET: common
+        SUT_REF: e874e3a90b1942b945477e6d9ba03880b4f4a19d
+        SUT_REPO: https://github.com/apache/cassandra.git
+    container_name: cassandra-accord-node1
+    environment:
+      CMS_BOOTSTRAP_HELPER: "1"
+      MAX_HEAP_SIZE: 1536M
+      NO_COLOR: "1"
+    hostname: cassandra-accord-node1
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - bash -c '</dev/tcp/$$(hostname)/9042' || exit 1
+      timeout: 3s
+      interval: 5s
+      retries: 120
+      start_period: 30s
+    image: cassandra-accord-cassandra:e874e3a9-cfg-durable
+    init: true
+    networks:
+      accord:
+        ipv4_address: 10.231.17.11
+    platform: linux/amd64
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 100000
+        hard: 100000
+    volumes:
+      - type: volume
+        source: node1-data
+        target: /var/lib/cassandra
+        volume: {}
+      - type: volume
+        source: bootstrap
+        target: /bootstrap
+        volume: {}
+  node2:
+    build:
+      context: /home/exedev/cassandra/cassandra-accord/antithesis
+      dockerfile: Dockerfile
+      args:
+        CONFIG_VARIANT: durable
+        PATCH_SET: common
+        SUT_REF: e874e3a90b1942b945477e6d9ba03880b4f4a19d
+        SUT_REPO: https://github.com/apache/cassandra.git
+    container_name: cassandra-accord-node2
+    depends_on:
+      node1:
+        condition: service_healthy
+        required: true
+    environment:
+      MAX_HEAP_SIZE: 1536M
+      NO_COLOR: "1"
+    hostname: cassandra-accord-node2
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - bash -c '</dev/tcp/$$(hostname)/9042' || exit 1
+      timeout: 3s
+      interval: 5s
+      retries: 120
+      start_period: 30s
+    image: cassandra-accord-cassandra:e874e3a9-cfg-durable
+    init: true
+    networks:
+      accord:
+        ipv4_address: 10.231.17.12
+    platform: linux/amd64
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 100000
+        hard: 100000
+    volumes:
+      - type: volume
+        source: node2-data
+        target: /var/lib/cassandra
+        volume: {}
+  node3:
+    build:
+      context: /home/exedev/cassandra/cassandra-accord/antithesis
+      dockerfile: Dockerfile
+      args:
+        CONFIG_VARIANT: durable
+        PATCH_SET: common
+        SUT_REF: e874e3a90b1942b945477e6d9ba03880b4f4a19d
+        SUT_REPO: https://github.com/apache/cassandra.git
+    container_name: cassandra-accord-node3
+    depends_on:
+      node2:
+        condition: service_healthy
+        required: true
+    environment:
+      MAX_HEAP_SIZE: 1536M
+      NO_COLOR: "1"
+    hostname: cassandra-accord-node3
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - bash -c '</dev/tcp/$$(hostname)/9042' || exit 1
+      timeout: 3s
+      interval: 5s
+      retries: 120
+      start_period: 30s
+    image: cassandra-accord-cassandra:e874e3a9-cfg-durable
+    init: true
+    networks:
+      accord:
+        ipv4_address: 10.231.17.13
+    platform: linux/amd64
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 100000
+        hard: 100000
+    volumes:
+      - type: volume
+        source: node3-data
+        target: /var/lib/cassandra
+        volume: {}
+networks:
+  accord:
+    name: cassandra-accord_accord
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.231.17.0/24
+volumes:
+  bootstrap:
+    name: cassandra-accord_bootstrap
+  ledger:
+    name: cassandra-accord_ledger
+  node1-data:
+    name: cassandra-accord_node1-data
+  node2-data:
+    name: cassandra-accord_node2-data
+  node3-data:
+    name: cassandra-accord_node3-data
+x-cassandra-node:
+  build:
+    args:
+      PATCH_SET: common
+      SUT_REF: e874e3a90b1942b945477e6d9ba03880b4f4a19d
+      SUT_REPO: https://github.com/apache/cassandra.git
+    context: ..
+    dockerfile: Dockerfile
+  healthcheck:
+    interval: 5s
+    retries: 120
+    start_period: 30s
+    test:
+      - CMD-SHELL
+      - bash -c '</dev/tcp/$$(hostname)/9042' || exit 1
+    timeout: 3s
+  image: cassandra-accord-cassandra:e874e3a9
+  init: true
+  platform: linux/amd64
+  ulimits:
+    memlock:
+      hard: -1
+      soft: -1
+    nofile:
+      hard: 100000
+      soft: 100000

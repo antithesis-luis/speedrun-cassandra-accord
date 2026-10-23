@@ -1,0 +1,122 @@
+# Antithesis harness: 3-node Apache Cassandra (Accord enabled) + 1 Python client.
+# Topology: antithesis/scratchbook/deployment-topology.md
+# - SUT image is built from source at a pinned ref (antithesis/Dockerfile); only build args change per ref.
+# - No restart: policy anywhere (Antithesis restarts killed containers itself).
+# - Each node keeps its data on its own named volume, so a killed node restarts with its data.
+# - Static addresses on one (non-internal) network: a restarted node keeps its IP, so CMS/TCM
+#   membership (keyed by address) stays valid after an Antithesis kill/restart.
+name: cassandra-accord
+
+x-cassandra-node: &cassandra-node
+  platform: linux/amd64
+  init: true
+  build:
+    context: ..
+    dockerfile: Dockerfile
+    args:
+      SUT_REPO: https://github.com/apache/cassandra.git
+      SUT_REF: e874e3a90b1942b945477e6d9ba03880b4f4a19d
+      PATCH_SET: common
+  image: cassandra-accord-cassandra:e874e3a9
+  ulimits:
+    nofile:
+      soft: 100000
+      hard: 100000
+    memlock:
+      soft: -1
+      hard: -1
+  healthcheck:
+    test: ["CMD-SHELL", "bash -c '</dev/tcp/$$(hostname)/9042' || exit 1"]
+    interval: 5s
+    timeout: 3s
+    retries: 120
+    start_period: 30s
+
+services:
+  node1:
+    <<: *cassandra-node
+    container_name: cassandra-accord-node1
+    hostname: cassandra-accord-node1
+    networks:
+      accord:
+        ipv4_address: 10.231.17.11
+    environment:
+      NO_COLOR: "1"
+      MAX_HEAP_SIZE: 1536M
+      CMS_BOOTSTRAP_HELPER: "1"
+    volumes:
+      - node1-data:/var/lib/cassandra
+      - bootstrap:/bootstrap
+
+  node2:
+    <<: *cassandra-node
+    container_name: cassandra-accord-node2
+    hostname: cassandra-accord-node2
+    networks:
+      accord:
+        ipv4_address: 10.231.17.12
+    environment:
+      NO_COLOR: "1"
+      MAX_HEAP_SIZE: 1536M
+    volumes:
+      - node2-data:/var/lib/cassandra
+    depends_on:
+      node1:
+        condition: service_healthy
+
+  node3:
+    <<: *cassandra-node
+    container_name: cassandra-accord-node3
+    hostname: cassandra-accord-node3
+    networks:
+      accord:
+        ipv4_address: 10.231.17.13
+    environment:
+      NO_COLOR: "1"
+      MAX_HEAP_SIZE: 1536M
+    volumes:
+      - node3-data:/var/lib/cassandra
+    depends_on:
+      node2:
+        condition: service_healthy
+
+  client:
+    platform: linux/amd64
+    init: true
+    container_name: cassandra-accord-client
+    hostname: cassandra-accord-client
+    networks:
+      accord:
+        ipv4_address: 10.231.17.20
+    build:
+      context: ../test
+      dockerfile: Dockerfile
+    image: cassandra-accord-workload:63f7cc96e480
+    environment:
+      NO_COLOR: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      CASSANDRA_NODES: cassandra-accord-node1,cassandra-accord-node2,cassandra-accord-node3
+    volumes:
+      - ledger:/ledger
+      - bootstrap:/bootstrap
+    depends_on:
+      node1:
+        condition: service_healthy
+      node2:
+        condition: service_healthy
+      node3:
+        condition: service_healthy
+
+volumes:
+  node1-data:
+  node2-data:
+  node3-data:
+  ledger:
+  bootstrap:
+
+networks:
+  accord:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.231.17.0/24
